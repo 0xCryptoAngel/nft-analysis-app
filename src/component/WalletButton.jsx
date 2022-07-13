@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from 'react';
 import { useWeb3React } from '@web3-react/core';
-import { MetaMaskconnector } from './config';
+import { MetaMaskconnector } from '../config/config';
 
 const WalletButton = () => {
 

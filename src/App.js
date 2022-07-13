@@ -1,6 +1,6 @@
 import './App.css';
 import { useState, useEffect } from 'react'
-import WalletButton from './config/WalletButton'
+import WalletButton from './component/WalletButton'
 import { useWeb3React } from "@web3-react/core";
 import nft from "./config/nft.json"
 
