@@ -44,7 +44,7 @@ function App() {
     }
   };
   return (
-    <div className="container">
+    <div className="box-area">
       <div className='nav-bar'>
         <div className='title'>Scheduled NFT mint page</div>
         <WalletButton/>
@@ -77,7 +77,10 @@ function App() {
             <input type="number" placeholder='please input your contract address' value={fee} onChange={handleFee}/>
           </div>
           <div className='item' onClick={mint}>
-            <button>Run</button>
+            <label>Accounts*</label>
+            <select className="" >
+              <option value="0x2776AA6B11D4EE9b00C85eb40E0E48B1b84637Aa">0x2776AA6B11D4EE9b00C85eb40E0E48B1b84637Aa</option>
+            </select>
           </div>
         </div>
       </div>
