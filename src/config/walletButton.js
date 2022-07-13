@@ -1,10 +1,10 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { MetaMaskconnector } from './config';
 
 const WalletButton = () => {
 
-  const { active, activate, account, error } = useWeb3React()
+  const { active, activate, account } = useWeb3React()
   useEffect(() => {
     if (active) {
       localStorage.setItem('shouldEagerConnect', true)
