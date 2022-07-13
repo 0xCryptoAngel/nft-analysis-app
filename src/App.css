@@ -9,6 +9,7 @@
   font-size: 30px;
   text-align: center;
   padding: 30px 0;
+  padding-left: 100px;
 }
 .row {
   display: flex;
@@ -35,11 +36,60 @@
   border: 1px solid #00E4EF;
   background-color: #21243B;
   margin-top: 5px;
+  color: white;
 }
-.item input[type=submit] {
+.item input[type=number] {
   border-radius: 20px;
   padding: 10px 15px;
   border: 1px solid #00E4EF;
   background-color: #21243B;
   margin-top: 5px;
+  color: white;
+}
+
+.item select {
+  border-radius: 20px;
+  padding: 10px 15px;
+  border: 1px solid #00E4EF;
+  background-color: #21243B;
+  margin-top: 5px;
+  color: white;
+  -webkit-appearance: none;
+}
+
+.item button {
+  border-radius: 20px;
+  padding: 6px 15px;
+  border: 1px solid #00E4EF;
+  background-color: #21243B;
+  margin-top: 30px;
+  color: white;
+  font-size: 20px;
+}
+.item button:hover {
+  background-color: #4a518b;
+ 
+}
+.wallet-btn {
+  width: 150px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  background-color: #3d426a;
+  border-radius: 10px;
+  border: none;
+  color: rgb(153, 148, 148);
+}
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 800px;
+  margin: 0 auto;
+}
+.wallet-btn:hover {
+  background-color: #4a518b;
+  color: white;
 }

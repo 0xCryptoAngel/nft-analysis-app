@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from "react";
-import { MetaMask } from "./wallet";
+import { MetaMaskconnector } from "./config";
 import { useWeb3React } from "@web3-react/core";
 
 function MetamaskProvider({ children }) {
@@ -12,11 +12,11 @@ function MetamaskProvider({ children }) {
   const shouldEagerConnect = localStorage.getItem("shouldEagerConnect");
   useEffect(() => {
     if (shouldEagerConnect === "true") {
-      MetaMask.isAuthorized()
+      MetaMaskconnector.isAuthorized()
         .then((isAuthorized) => {
           setLoaded(true);
           if (isAuthorized && !networkActive && !networkError) {
-            activateNetwork(MetaMask);
+            activateNetwork(MetaMaskconnector);
           }
         })
         .catch(() => {

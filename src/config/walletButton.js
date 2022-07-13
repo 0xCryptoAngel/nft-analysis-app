@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { MetaMaskconnector } from './config';
 
-const WalletButton = (props) => {
+const WalletButton = () => {
 
   const { active, activate, account, error } = useWeb3React()
   useEffect(() => {
@@ -16,8 +16,8 @@ const WalletButton = (props) => {
   },[activate])
 
   return (
-    <button className=""> 
-      <div className="" onClick={handleConnectMetaMask}>CONNECT WALLET</div>
+    <button className="wallet-btn"> 
+      {active? <div>{`${account.slice(0, -36)}...${account.substring(37)}`}</div>:<div className="" onClick={handleConnectMetaMask}>CONNECT</div>}
     </button>
   )
 }
