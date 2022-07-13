@@ -8,7 +8,6 @@
 body {
   background: url(./assets/background.svg) no-repeat;
   background-size: cover;
-
 }
 
 .title {
@@ -17,7 +16,8 @@ body {
   padding: 30px 0;
   padding-left: 100px;
   text-shadow: 0px 0px 6px rgba(255,255,255,0.7);
-  font-family: "Luckiest", sans-serif;
+  font-family: "Luckiest Guy";
+  color: white;
 }
 .row {
   display: flex;
@@ -41,25 +41,25 @@ body {
 .item input[type=text] {
   border-radius: 20px;
   padding: 10px 15px;
-  border: 1px solid #00E4EF;
-  background-color: #21243B;
-  margin-top: 5px;
-  color: white;
-}
-.item input[type=number] {
-  border-radius: 20px;
-  padding: 10px 15px;
-  border: 1px solid #00E4EF;
-  background-color: #21243B;
+  background-color: #570472;
+  border: 1px solid white;
   margin-top: 5px;
   color: white;
 }
 
+.item input[type=number] {
+  border-radius: 20px;
+  padding: 10px 15px;
+  border: 1px solid white;
+  background-color: #570472;
+  margin-top: 5px;
+  color: white;
+}
 .item select {
   border-radius: 20px;
   padding: 10px 15px;
-  border: 1px solid #00E4EF;
-  background-color: #21243B;
+  border: 1px solid white;
+  background-color: #570472;
   margin-top: 5px;
   color: white;
   -webkit-appearance: none;
@@ -69,7 +69,7 @@ body {
   border-radius: 20px;
   padding: 6px 15px;
   border: 1px solid #00E4EF;
-  background-color: #21243B;
+  background-color: #570472;
   margin-top: 30px;
   color: white;
   font-size: 20px;
@@ -88,7 +88,8 @@ body {
   background-color: #3d426a;
   border-radius: 10px;
   border: none;
-  color: rgb(153, 148, 148);
+  color: white;
+  font-family: "Luckiest Guy";
 }
 .nav-bar {
   display: flex;
@@ -112,7 +113,8 @@ body {
   border-radius: 10px;
   background: linear-gradient(rgba(27, 30, 202, 0.6), rgba(223, 17, 223, 0.2));
   display: flex;
-  color: rgb(153, 148, 148);
+  font-family: "Permanent Marker";
+  color: white;
   flex-direction: column;
   width: 900px;
   margin: 0 auto;
