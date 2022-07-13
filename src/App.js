@@ -77,7 +77,7 @@ function App() {
             <input type="number" placeholder='please input your contract address' value={fee} onChange={handleFee}/>
           </div>
           <div className='item' onClick={mint}>
-            <button>mint</button>
+            <button>Run</button>
           </div>
         </div>
       </div>
