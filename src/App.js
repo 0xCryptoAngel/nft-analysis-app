@@ -3,13 +3,18 @@ import { useState, useEffect } from 'react'
 import WalletButton from './component/WalletButton'
 import { useWeb3React } from "@web3-react/core";
 import nft from "./config/nft.json"
-import date from './assets/calendar.svg';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 // import Web3 from 'web3'
 function App() {
   const [address, setAddress] = useState('')
   const [price, setPrice] = useState(0.003)
   const [gas, setGas] = useState(0)
+  const [delay, setDelay] = useState(0)
   const [fee, setFee] = useState(0)
+  const [date, setDate] = useState(0)
+  const [checked, setChecked] = useState(false)
   const { active, account, library } = useWeb3React();
   let mintContract;
   // const web3 = new Web3('https://rinkeby.infura.io/v3/a02bdad6cdeb43bfa8fc6577dbff0fd0')
@@ -17,10 +22,11 @@ function App() {
   let amount = 1;
   useEffect(() => {
     if(address.length === 42 && address.includes("0x") && library && active) {
+      setChecked(true);
       // eslint-disable-next-line react-hooks/exhaustive-deps
       mintContract = new library.eth.Contract(nft, address);
-
     }
+
   }, [address]);
 
 
@@ -36,15 +42,29 @@ function App() {
   const handleFee = (e) => {
     setFee(e.target.value);
   };
+  const handleDate = (e) => {
+    setDate(e.target.value)
+    console.log("date", e.target.value)
+    if(new Date(e.target.value) > new Date()) {
+      let value = new Date(e.target.value)- new Date()
+      console.log('value', value)
+    } else {
+      toast("Please set correct schedule date!")
+    }
+  }
   // const privateKey = '1b40ed37e7bb55dfd5a929ef57458137c6ce6b6b978c508260432deca5be5580';
   const mint = async () => {
-    const _amountOfEther = price * 1000000000000000000;
-    try {
-      if(active) {
-        await mintContract.methods.publicsaleAngel(amount).send({from:account, gas: 15000 * 1000000000, value: _amountOfEther})
+    if(checked) {
+      const _amountOfEther = price * 1000000000000000000;
+      try {
+        if(active) {
+          await mintContract.methods.publicsaleAngel(amount).send({from:account, gas: 15000 * 1000000000, value: _amountOfEther})
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
+    } else {
+      toast("You must input contract address")
     }
   };
   const handleSchedule = () => {
@@ -85,13 +105,24 @@ function App() {
           </div>
           <div className='item'>
             <label>Schedule</label>
-            <input type="date" />
+            <input type="date" value={date} onChange={handleDate}/>
           </div>
         </div>
       </div>
-      <div className='mint-btn'>
+      <div className='mint-btn' onClick={mint}>
         <button>Mint</button>
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        />
     </div>
   );
 }
