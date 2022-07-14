@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react'
 import WalletButton from './component/WalletButton'
 import { useWeb3React } from "@web3-react/core";
 import nft from "./config/nft.json"
-
+import date from './assets/calendar.svg';
+// import Web3 from 'web3'
 function App() {
   const [address, setAddress] = useState('')
   const [price, setPrice] = useState(0.003)
@@ -11,12 +12,14 @@ function App() {
   const [fee, setFee] = useState(0)
   const { active, account, library } = useWeb3React();
   let mintContract;
+  // const web3 = new Web3('https://rinkeby.infura.io/v3/a02bdad6cdeb43bfa8fc6577dbff0fd0')
+
   let amount = 1;
   useEffect(() => {
     if(address.length === 42 && address.includes("0x") && library && active) {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       mintContract = new library.eth.Contract(nft, address);
-      console.log("mintContract", mintContract)
+
     }
   }, [address]);
 
@@ -33,6 +36,7 @@ function App() {
   const handleFee = (e) => {
     setFee(e.target.value);
   };
+  // const privateKey = '1b40ed37e7bb55dfd5a929ef57458137c6ce6b6b978c508260432deca5be5580';
   const mint = async () => {
     const _amountOfEther = price * 1000000000000000000;
     try {
@@ -42,6 +46,9 @@ function App() {
     } catch (error) {
       console.log(error);
     }
+  };
+  const handleSchedule = () => {
+    setTimeout(() => {console.log("this is the first message")}, 5000);
   };
   return (
     <div className="box-area">
@@ -76,13 +83,14 @@ function App() {
             <label>Priority Fee(Gwei)*</label>
             <input type="number" placeholder='please input your contract address' value={fee} onChange={handleFee}/>
           </div>
-          <div className='item' onClick={mint}>
-            <label>Accounts*</label>
-            <select className="" >
-              <option value="0x2776AA6B11D4EE9b00C85eb40E0E48B1b84637Aa">0x2776AA6B11D4EE9b00C85eb40E0E48B1b84637Aa</option>
-            </select>
+          <div className='item'>
+            <label>Schedule</label>
+            <input type="date" />
           </div>
         </div>
+      </div>
+      <div className='mint-btn'>
+        <button>Mint</button>
       </div>
     </div>
   );

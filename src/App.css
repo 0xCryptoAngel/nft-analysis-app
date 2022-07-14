@@ -46,7 +46,14 @@ body {
   margin-top: 5px;
   color: white;
 }
-
+.item input[type=date] {
+  border-radius: 20px;
+  padding: 10px 15px;
+  background-color: #570472;
+  border: 1px solid white;
+  margin-top: 5px;
+  color: white;
+}
 .item input[type=number] {
   border-radius: 20px;
   padding: 10px 15px;
@@ -85,11 +92,12 @@ body {
   justify-content: center;
   align-items: center;
   font-size: 18px;
-  background-color: #3d426a;
-  border-radius: 10px;
+  background-color: #d345d5;
+  border-radius: 20px;
   border: none;
   color: white;
   font-family: "Luckiest Guy";
+  border: 1px solid white;
 }
 .nav-bar {
   display: flex;
@@ -99,8 +107,9 @@ body {
   margin: 0 auto;
 }
 .wallet-btn:hover {
-  background-color: #4a518b;
-  color: white;
+  background-color: #e558e7;
+  border: 1px solid #00E4EF;
+  color: rgb(126, 115, 115);
 }
 .box-area {
   box-shadow: rgb(255, 255, 255, 0.5) 0px 0px 10px 10px;
@@ -119,4 +128,24 @@ body {
   width: 900px;
   margin: 0 auto;
   margin-top: 200px;
+}
+.mint-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.mint-btn button {
+  padding: 8px 50px;
+  background-color: #d345d5;
+  border-radius: 20px;
+  border: 1px solid white;
+  font-size: 25px;
+  margin: 20px 0;
+  font-family: 'Luckiest Guy';
+  color: white;
+}
+.mint-btn button:hover {
+  background-color: #e558e7;
+  border: 1px solid #00E4EF;
+  color: rgb(126, 115, 115);
 }
