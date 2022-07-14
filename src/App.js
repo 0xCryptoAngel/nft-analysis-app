@@ -25,6 +25,8 @@ function App() {
       setChecked(true);
       // eslint-disable-next-line react-hooks/exhaustive-deps
       mintContract = new library.eth.Contract(nft, address);
+    } else {
+      return;
     }
 
   }, [address]);
@@ -49,26 +51,25 @@ function App() {
       let value = new Date(e.target.value)- new Date()
       console.log('value', value)
     } else {
-      toast("Please set correct schedule date!")
+      toast.warning("Please set correct schedule date!")
     }
   }
-  // const privateKey = '1b40ed37e7bb55dfd5a929ef57458137c6ce6b6b978c508260432deca5be5580';
   const mint = async () => {
     if(checked) {
-      const _amountOfEther = price * 1000000000000000000;
-      try {
-        if(active) {
-          await mintContract.methods.publicsaleAngel(amount).send({from:account, gas: 15000 * 1000000000, value: _amountOfEther})
+      toast.success("Successfully!!!")
+      setTimeout(async () => {
+        const _amountOfEther = price * 1000000000000000000;
+        try {
+          if(active) {
+            await mintContract.methods.publicsaleAngel(amount).send({from:account, gas: 15000 * 1000000000, value: _amountOfEther})
+          }
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error) {
-        console.log(error);
-      }
+      }, 5000);
     } else {
-      toast("You must input contract address")
+      toast.warning("You must input contract address")
     }
-  };
-  const handleSchedule = () => {
-    setTimeout(() => {console.log("this is the first message")}, 5000);
   };
   return (
     <div className="box-area">
@@ -109,8 +110,8 @@ function App() {
           </div>
         </div>
       </div>
-      <div className='mint-btn' onClick={mint}>
-        <button>Mint</button>
+      <div className='mint-btn'>
+        <button onClick={mint}>Mint</button>
       </div>
       <ToastContainer
         position="top-center"
