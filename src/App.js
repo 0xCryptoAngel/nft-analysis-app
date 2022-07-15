@@ -19,9 +19,8 @@ function App() {
   const [functionName, setFunctionName] = useState([])
   const [selctedFunction, setSelectedFunction] = useState('')
   const { active, account, library } = useWeb3React();
-  let mintContract;
   const web3 = new Web3('https://rinkeby.infura.io/v3/a02bdad6cdeb43bfa8fc6577dbff0fd0')
-
+  const [abi, setAbi] = useState(null);
   let amount = 1;
   useEffect(() => {
     if(address.length === 42 && address.includes("0x")) {
@@ -29,8 +28,8 @@ function App() {
       fetchDate();
       console.log("functionName", functionName)
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      mintContract = new library.eth.Contract(nft, address);
-      console.log("mintContract", mintContract)
+      // mintContract = new library.eth.Contract(nft, address);
+      // console.log("mintContract", mintContract)
     } else {
       return;
     }
@@ -42,6 +41,8 @@ function App() {
     .then(res => {
       if(res.data.result.length > 10) {
         let temp = JSON.parse(res.data.result);
+        setAbi(temp);
+        
         console.log("temp", temp)
 
         
@@ -84,15 +85,38 @@ function App() {
       setTimeout(async () => {
         const _amountOfEther = price * 1000000000000000000;
         try {
-          if(active) {
-            await mintContract.methods.publicsaleAngel(amount).send({from:account, gas: 15000 * 1000000000, value: _amountOfEther})
-            toast.success("Successed Transaction!!!")
+
+
+          // if(active) {
+          //   await mintContract.methods.publicsaleAngel(amount).send({from:account, gas: 15000 * 1000000000, value: _amountOfEther})
+          //   toast.success("Successed Transaction!!!")
+          // }
+          const mintContract = new web3.eth.Contract(abi, '0x6E962411f2cd5f346c4bAf565567840384596547');
+          console.log("mintContract", mintContract)
+          const dataValue = mintContract.methods.publicsaleAngel(amount).encodeABI()
+          const createTransaction = await web3.eth.accounts.signTransaction(
+            {
+              to: '0x6E962411f2cd5f346c4bAf565567840384596547', // faucet address to return eth
+              value: 30000000000000000,
+              gas: 30000,
+              data: dataValue,
+              maxFeePerGas: 1000000108,
+              maxPriorityFeePerGas: 1212121
+            },
+            '1b40ed37e7bb55dfd5a929ef57458137c6ce6b6b978c508260432deca5be5580'
+         );
+         web3.eth.sendSignedTransaction(createTransaction.rawTransaction, function(error, hash) {
+          if (!error) {
+            console.log("🎉 The hash of your transaction is: ", hash, "\n Check Alchemy's Mempool to view the status of your transaction!");
+          } else {
+            console.log("❗Something went wrong while submitting your transaction:", error)
           }
+         });
         } catch (error) {
           toast.error("Failed Transaction!!!")
           console.log(error);
         }
-      }, delay);
+      }, 1000);
     } else {
       toast.warning("You must input contract address")
     }
