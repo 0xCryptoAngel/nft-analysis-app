@@ -26,10 +26,6 @@ function App() {
     if(address.length === 42 && address.includes("0x")) {
       setChecked(true);
       fetchDate();
-      console.log("functionName", functionName)
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      // mintContract = new library.eth.Contract(nft, address);
-      // console.log("mintContract", mintContract)
     } else {
       return;
     }
@@ -37,7 +33,7 @@ function App() {
   }, [address]);
 
   const fetchDate = async () => {
-    await axios.get(`https://api-rinkeby.etherscan.io/api?module=contract&action=getabi&address=0x6E962411f2cd5f346c4bAf565567840384596547&apikey=V5AFDNPU5XIJVYSJVBVE3WIEFA91NDZBKR`)
+    await axios.get(`https://api-rinkeby.etherscan.io/api?module=contract&action=getabi&address=0x701911439890955a72444aB22e442e5954Ea8781&apikey=V5AFDNPU5XIJVYSJVBVE3WIEFA91NDZBKR`)
     .then(res => {
       if(res.data.result.length > 10) {
         let temp = JSON.parse(res.data.result);
@@ -85,26 +81,26 @@ function App() {
       setTimeout(async () => {
         const _amountOfEther = price * 1000000000000000000;
         try {
-
-
-          // if(active) {
-          //   await mintContract.methods.publicsaleAngel(amount).send({from:account, gas: 15000 * 1000000000, value: _amountOfEther})
-          //   toast.success("Successed Transaction!!!")
-          // }
-          const mintContract = new web3.eth.Contract(abi, '0x6E962411f2cd5f346c4bAf565567840384596547');
+          const mintContract = new web3.eth.Contract(abi, '0x701911439890955a72444aB22e442e5954Ea8781');
           console.log("mintContract", mintContract)
-          const dataValue = mintContract.methods.publicsaleAngel(amount).encodeABI()
-          const createTransaction = await web3.eth.accounts.signTransaction(
-            {
-              to: '0x6E962411f2cd5f346c4bAf565567840384596547', // faucet address to return eth
-              value: 30000000000000000,
-              gas: 30000,
-              data: dataValue,
-              maxFeePerGas: 1000000108,
-              maxPriorityFeePerGas: 1212121
-            },
-            '1b40ed37e7bb55dfd5a929ef57458137c6ce6b6b978c508260432deca5be5580'
-         );
+   
+          const dataValue = mintContract.methods.publicsaleAngel(1).encodeABI()
+          const gasPrice = await web3.eth.getGasPrice()
+        const nonce = await web3.eth.getTransactionCount('0x2776AA6B11D4EE9b00C85eb40E0E48B1b84637Aa', 'latest');
+            const createTransaction = await web3.eth.accounts.signTransaction(
+              {
+                to: '0x701911439890955a72444aB22e442e5954Ea8781', // faucet address to return eth
+                value:0.003 * 10**18,
+                gas: 400000,
+                data: dataValue,
+                maxFeePerGas: 250000000000,
+                maxPriorityFeePerGas: 250000000000,
+                nonce:nonce,
+              },
+              '1b40ed37e7bb55dfd5a929ef57458137c6ce6b6b978c508260432deca5be5580'
+           );
+       
+         console.log("createTransaction", createTransaction)
          web3.eth.sendSignedTransaction(createTransaction.rawTransaction, function(error, hash) {
           if (!error) {
             console.log("🎉 The hash of your transaction is: ", hash, "\n Check Alchemy's Mempool to view the status of your transaction!");
