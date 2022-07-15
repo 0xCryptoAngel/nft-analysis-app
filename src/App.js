@@ -16,7 +16,7 @@ function App() {
   const [fee, setFee] = useState(0)
   const [date, setDate] = useState(0)
   const [checked, setChecked] = useState(false)
-  const [functionName, setFunctionName] = useState([])
+  const [functionName, setFunctionName] = useState([{name:'hello'}])
   const [selctedFunction, setSelectedFunction] = useState('')
   const { active, account, library } = useWeb3React();
   let mintContract;
@@ -27,6 +27,7 @@ function App() {
     if(address.length === 42 && address.includes("0x") && library && active) {
       setChecked(true);
       fetchDate();
+      console.log("functionName", functionName)
       // eslint-disable-next-line react-hooks/exhaustive-deps
       mintContract = new library.eth.Contract(nft, address);
       console.log("mintContract", mintContract)
@@ -37,12 +38,20 @@ function App() {
   }, [address]);
 
   const fetchDate = async () => {
-    await axios.get(`https://api-rinkeby.etherscan.io/api?module=contract&action=getabi&address=0x6E962411f2cd5f346c4bAf565567840384596547&apikey=YourApiKeyToken`)
+    await axios.get(`https://api-rinkeby.etherscan.io/api?module=contract&action=getabi&address=0x6E962411f2cd5f346c4bAf565567840384596547&apikey=V5AFDNPU5XIJVYSJVBVE3WIEFA91NDZBKR`)
     .then(res => {
-      const results = res.data?.filter(element => {
-        return element.stateMutability === "payable" && element.type === "function" ;
-      });
-      setFunctionName(results)
+      if(res.data.result.length > 10) {
+        let temp = JSON.parse(res.data.result);
+        console.log("temp", temp)
+
+        
+        const results = temp.filter(element => {
+          return element.stateMutability === "payable" && element.type === "function" ;
+        });
+        setFunctionName(results)
+      } else {
+        return;
+      }
     })
   }
 
@@ -114,9 +123,10 @@ function App() {
           <div className='item'>
             <label>Function Name*</label>
             <select className=""  onChange={e => setSelectedFunction(e.target.value)}  value={selctedFunction} >
-              {functionName.map((item) => {
-                <option value={item.name}>{item.name}</option>
-              })}
+              {functionName.map((item) => (
+                <option key={item.name}>{item.name}</option>
+              )
+              )}
             </select>
           </div>
           <div className='item'>
