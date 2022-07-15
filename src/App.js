@@ -16,33 +16,35 @@ function App() {
   const [checked, setChecked] = useState(false)
   const [functionName, setFunctionName] = useState([])
   const [selctedFunction, setSelectedFunction] = useState('')
-  const web3 = new Web3('https://rinkeby.infura.io/v3/a02bdad6cdeb43bfa8fc6577dbff0fd0')
+  console.log(process.env.REACT_APP_INFURA_KEY)
+ 
+  const web3 = new Web3(`https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`)
   const [abi, setAbi] = useState(null);
   let amount = 1;
   useEffect(() => {
     if(address.length === 42 && address.includes("0x")) {
       setChecked(true);
-      fetchDate();
+
+      console.log(address)
+      fetchDate(address);
     } else {
       return;
     }
 
   }, [address]);
 
-  const fetchDate = async () => {
-    await axios.get(`https://api-rinkeby.etherscan.io/api?module=contract&action=getabi&address=0x701911439890955a72444aB22e442e5954Ea8781&apikey=V5AFDNPU5XIJVYSJVBVE3WIEFA91NDZBKR`)
-    .then(res => {
-      if(res.data.result.length > 10) {
-        let temp = JSON.parse(res.data.result);
-        setAbi(temp);
-        const results = temp.filter(element => {
-          return element.stateMutability === "payable" && element.type === "function" ;
-        });
-        setFunctionName(results)
-      } else {
-        return;
-      }
-    })
+  const fetchDate = async (address) => {
+    const res = await axios.get(`https://api-rinkeby.etherscan.io/api?module=contract&action=getabi&address=${address}&apikey=${process.env.REACT_APP_ETHER_API}`)
+    if(res.data.result.length > 10) {
+      let temp = JSON.parse(res.data.result);
+      setAbi(temp);
+      const results = temp.filter(element => {
+        return element.stateMutability === "payable" && element.type === "function" ;
+      });
+      setFunctionName(results)
+    } else {
+      return;
+    }
   }
 
 
@@ -79,15 +81,14 @@ function App() {
         toast.success("Successed Schedule!!!")
         setTimeout(async () => {
           try {
-            const mintContract = new web3.eth.Contract(abi, '0x701911439890955a72444aB22e442e5954Ea8781');
-            console.log("mintContract", mintContract)
-    
+            const mintContract = new web3.eth.Contract(abi, address);
             const dataValue = mintContract.methods.publicsaleAngel(1).encodeABI()
             const gasPrice = await web3.eth.getGasPrice()
-            const nonce = await web3.eth.getTransactionCount('0x2776AA6B11D4EE9b00C85eb40E0E48B1b84637Aa', 'latest');
+            const account = await web3.eth.accounts.privateKeyToAccount(process.env.REACT_APP_PRIVATE_KEY);
+            const nonce = await web3.eth.getTransactionCount(account.address, 'latest');
               const createTransaction = await web3.eth.accounts.signTransaction(
                 {
-                  to: '0x701911439890955a72444aB22e442e5954Ea8781', // faucet address to return eth
+                  to: address, // faucet address to return eth
                   value: price * 10**18,
                   gas: 400000,
                   data: dataValue,
@@ -95,7 +96,7 @@ function App() {
                   maxPriorityFeePerGas: fee * 10**9,
                   nonce:nonce,
                 },
-                '1b40ed37e7bb55dfd5a929ef57458137c6ce6b6b978c508260432deca5be5580'
+                process.env.REACT_APP_PRIVATE_KEY
             );
         
           web3.eth.sendSignedTransaction(createTransaction.rawTransaction, function(error, hash) {
@@ -126,15 +127,15 @@ function App() {
         <div className='row'>
           <div className='item'>
             <label>Contract*</label>
-            <input type="text" placeholder='0x6E962411f2cd5f312c4bAf565567840384596547' value={address} onChange={handleAddress}/>
+            <input type="text" placeholder='0x701911439890955a72444aB22e442e5954Ea8781' value={address} onChange={handleAddress}/>
           </div>
           <div className='item'>
             <label>Price in Eth*</label>
-            <input type="number" placeholder='input price' value={price} onChange={handlePrice} step="0.001"/>
+            <input type="number" placeholder='0.003' value={price} onChange={handlePrice} step="0.001"/>
           </div>
           <div className='item'>
             <label>Max Gas(Gwei)*</label>
-            <input type="number" placeholder='please gas' value={gas} onChange={handleGas}/>
+            <input type="number" placeholder='250' value={gas} onChange={handleGas}/>
           </div>
         </div>
 
@@ -150,7 +151,7 @@ function App() {
           </div>
           <div className='item'>
             <label>Priority Fee(Gwei)*</label>
-            <input type="number" placeholder='please input your contract address' value={fee} onChange={handleFee}/>
+            <input type="number" placeholder='250' value={fee} onChange={handleFee}/>
           </div>
           <div className='item'>
             <label>Schedule</label>
