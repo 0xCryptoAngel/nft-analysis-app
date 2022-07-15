@@ -1,8 +1,5 @@
 import './App.css';
 import { useState, useEffect } from 'react'
-import WalletButton from './component/WalletButton'
-import { useWeb3React } from "@web3-react/core";
-import nft from "./config/nft.json"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
@@ -19,7 +16,6 @@ function App() {
   const [checked, setChecked] = useState(false)
   const [functionName, setFunctionName] = useState([])
   const [selctedFunction, setSelectedFunction] = useState('')
-  const { active, account, library } = useWeb3React();
   const web3 = new Web3('https://rinkeby.infura.io/v3/a02bdad6cdeb43bfa8fc6577dbff0fd0')
   const [abi, setAbi] = useState(null);
   let amount = 1;
