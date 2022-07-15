@@ -42,6 +42,10 @@ function App() {
         return element.stateMutability === "payable" && element.type === "function" ;
       });
       setFunctionName(results)
+      if(results.length === 1) {
+        console.log("results[0]", results[0])
+        setSelectedFunction(results[0].name)
+      }
     } else {
       return;
     }
@@ -75,14 +79,19 @@ function App() {
       toast.warning("Please set correct schedule date!")
     }
   }
+  const handleFunction = (e) => {
+    console.log("e.target.value", e.target.value)
+    //  setSelectedFunction(e.target.value)
+  }
   const mint = async () => {
     if(priceFlag) {
       if(checked) {
         toast.success("Successed Schedule!!!")
         setTimeout(async () => {
           try {
+            console.log("selctedFunction", selctedFunction)
             const mintContract = new web3.eth.Contract(abi, address);
-            const dataValue = mintContract.methods.publicsaleAngel(1).encodeABI()
+            const dataValue = mintContract.methods[selctedFunction](1).encodeABI()
             const gasPrice = await web3.eth.getGasPrice()
             const account = await web3.eth.accounts.privateKeyToAccount(process.env.REACT_APP_PRIVATE_KEY);
             const nonce = await web3.eth.getTransactionCount(account.address, 'latest');
@@ -142,9 +151,9 @@ function App() {
         <div className='row'>
           <div className='item'>
             <label>Function Name*</label>
-            <select className=""  onChange={e => setSelectedFunction(e.target.value)}  value={selctedFunction} >
+            <select className=""  onChange={handleFunction}  value={selctedFunction} >
               {functionName.map((item) => (
-                <option key={item.name}>{item.name}</option>
+                <option key={item.name} value={item.name}>{item.name}</option>
               )
               )}
             </select>
