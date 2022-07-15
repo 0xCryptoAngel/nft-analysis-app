@@ -5,6 +5,7 @@ import { useWeb3React } from "@web3-react/core";
 import nft from "./config/nft.json"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 
 // import Web3 from 'web3'
 function App() {
@@ -15,6 +16,8 @@ function App() {
   const [fee, setFee] = useState(0)
   const [date, setDate] = useState(0)
   const [checked, setChecked] = useState(false)
+  const [functionName, setFunctionName] = useState([])
+  const [selctedFunction, setSelectedFunction] = useState('')
   const { active, account, library } = useWeb3React();
   let mintContract;
   // const web3 = new Web3('https://rinkeby.infura.io/v3/a02bdad6cdeb43bfa8fc6577dbff0fd0')
@@ -23,13 +26,25 @@ function App() {
   useEffect(() => {
     if(address.length === 42 && address.includes("0x") && library && active) {
       setChecked(true);
+      fetchDate();
       // eslint-disable-next-line react-hooks/exhaustive-deps
       mintContract = new library.eth.Contract(nft, address);
+      console.log("mintContract", mintContract)
     } else {
       return;
     }
 
   }, [address]);
+
+  const fetchDate = async () => {
+    await axios.get(`https://api-rinkeby.etherscan.io/api?module=contract&action=getabi&address=0x6E962411f2cd5f346c4bAf565567840384596547&apikey=YourApiKeyToken`)
+    .then(res => {
+      const results = res.data?.filter(element => {
+        return element.stateMutability === "payable" && element.type === "function" ;
+      });
+      setFunctionName(results)
+    })
+  }
 
 
   const handleAddress = (e) => {
@@ -49,24 +64,26 @@ function App() {
     console.log("date", e.target.value)
     if(new Date(e.target.value) > new Date()) {
       let value = new Date(e.target.value)- new Date()
-      console.log('value', value)
+      setDelay(value)
     } else {
       toast.warning("Please set correct schedule date!")
     }
   }
   const mint = async () => {
     if(checked) {
-      toast.success("Successfully!!!")
+      toast.success("Successed Schedule!!!")
       setTimeout(async () => {
         const _amountOfEther = price * 1000000000000000000;
         try {
           if(active) {
             await mintContract.methods.publicsaleAngel(amount).send({from:account, gas: 15000 * 1000000000, value: _amountOfEther})
+            toast.success("Successed Transaction!!!")
           }
         } catch (error) {
+          toast.error("Failed Transaction!!!")
           console.log(error);
         }
-      }, 5000);
+      }, delay);
     } else {
       toast.warning("You must input contract address")
     }
@@ -96,8 +113,10 @@ function App() {
         <div className='row'>
           <div className='item'>
             <label>Function Name*</label>
-            <select className="" >
-              <option value="publicsaleAngel">publicsaleAngel</option>
+            <select className=""  onChange={e => setSelectedFunction(e.target.value)}  value={selctedFunction} >
+              {functionName.map((item) => {
+                <option value={item.name}>{item.name}</option>
+              })}
             </select>
           </div>
           <div className='item'>
