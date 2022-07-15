@@ -7,7 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 
-// import Web3 from 'web3'
+import Web3 from 'web3'
 function App() {
   const [address, setAddress] = useState('')
   const [price, setPrice] = useState(0.003)
@@ -16,15 +16,15 @@ function App() {
   const [fee, setFee] = useState(0)
   const [date, setDate] = useState(0)
   const [checked, setChecked] = useState(false)
-  const [functionName, setFunctionName] = useState([{name:'hello'}])
+  const [functionName, setFunctionName] = useState([])
   const [selctedFunction, setSelectedFunction] = useState('')
   const { active, account, library } = useWeb3React();
   let mintContract;
-  // const web3 = new Web3('https://rinkeby.infura.io/v3/a02bdad6cdeb43bfa8fc6577dbff0fd0')
+  const web3 = new Web3('https://rinkeby.infura.io/v3/a02bdad6cdeb43bfa8fc6577dbff0fd0')
 
   let amount = 1;
   useEffect(() => {
-    if(address.length === 42 && address.includes("0x") && library && active) {
+    if(address.length === 42 && address.includes("0x")) {
       setChecked(true);
       fetchDate();
       console.log("functionName", functionName)
@@ -101,7 +101,7 @@ function App() {
     <div className="box-area">
       <div className='nav-bar'>
         <div className='title'>Scheduled NFT mint page</div>
-        <WalletButton/>
+        {/* <WalletButton/> */}
       </div>
       <div className='form'>
         <div className='row'>
