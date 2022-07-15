@@ -10,11 +10,12 @@ import axios from 'axios';
 import Web3 from 'web3'
 function App() {
   const [address, setAddress] = useState('')
-  const [price, setPrice] = useState(0.003)
+  const [price, setPrice] = useState(0)
+  const [priceFlag, setPriceFlag] = useState(false)
   const [gas, setGas] = useState(0)
   const [delay, setDelay] = useState(0)
   const [fee, setFee] = useState(0)
-  const [date, setDate] = useState(0)
+  const [date, setDate] = useState('2022-07-15')
   const [checked, setChecked] = useState(false)
   const [functionName, setFunctionName] = useState([])
   const [selctedFunction, setSelectedFunction] = useState('')
@@ -38,10 +39,6 @@ function App() {
       if(res.data.result.length > 10) {
         let temp = JSON.parse(res.data.result);
         setAbi(temp);
-        
-        console.log("temp", temp)
-
-        
         const results = temp.filter(element => {
           return element.stateMutability === "payable" && element.type === "function" ;
         });
@@ -57,7 +54,12 @@ function App() {
     setAddress(e.target.value);
   };
   const handlePrice = (e) => {
-    setPrice(Number(e.target.value));
+    if(e.target.value >= 0.003) {
+      setPrice(Number(e.target.value));
+      setPriceFlag(true)
+    } else {
+      return
+    }
   };
   const handleGas = (e) => {
     setGas(Number(e.target.value));
@@ -76,52 +78,53 @@ function App() {
     }
   }
   const mint = async () => {
-    if(checked) {
-      toast.success("Successed Schedule!!!")
-      setTimeout(async () => {
-        const _amountOfEther = price * 1000000000000000000;
-        try {
-          const mintContract = new web3.eth.Contract(abi, '0x701911439890955a72444aB22e442e5954Ea8781');
-          console.log("mintContract", mintContract)
-   
-          const dataValue = mintContract.methods.publicsaleAngel(1).encodeABI()
-          const gasPrice = await web3.eth.getGasPrice()
-        const nonce = await web3.eth.getTransactionCount('0x2776AA6B11D4EE9b00C85eb40E0E48B1b84637Aa', 'latest');
-            const createTransaction = await web3.eth.accounts.signTransaction(
-              {
-                to: '0x701911439890955a72444aB22e442e5954Ea8781', // faucet address to return eth
-                value:0.003 * 10**18,
-                gas: 400000,
-                data: dataValue,
-                maxFeePerGas: 250000000000,
-                maxPriorityFeePerGas: 250000000000,
-                nonce:nonce,
-              },
-              '1b40ed37e7bb55dfd5a929ef57458137c6ce6b6b978c508260432deca5be5580'
-           );
-       
-         console.log("createTransaction", createTransaction)
-         web3.eth.sendSignedTransaction(createTransaction.rawTransaction, function(error, hash) {
-          if (!error) {
-            console.log("🎉 The hash of your transaction is: ", hash, "\n Check Alchemy's Mempool to view the status of your transaction!");
-          } else {
-            console.log("❗Something went wrong while submitting your transaction:", error)
+    if(priceFlag) {
+      if(checked) {
+        toast.success("Successed Schedule!!!")
+        setTimeout(async () => {
+          try {
+            const mintContract = new web3.eth.Contract(abi, '0x701911439890955a72444aB22e442e5954Ea8781');
+            console.log("mintContract", mintContract)
+    
+            const dataValue = mintContract.methods.publicsaleAngel(1).encodeABI()
+            const gasPrice = await web3.eth.getGasPrice()
+            const nonce = await web3.eth.getTransactionCount('0x2776AA6B11D4EE9b00C85eb40E0E48B1b84637Aa', 'latest');
+              const createTransaction = await web3.eth.accounts.signTransaction(
+                {
+                  to: '0x701911439890955a72444aB22e442e5954Ea8781', // faucet address to return eth
+                  value: price * 10**18,
+                  gas: 400000,
+                  data: dataValue,
+                  maxFeePerGas: gas * 10**9,
+                  maxPriorityFeePerGas: fee * 10**9,
+                  nonce:nonce,
+                },
+                '1b40ed37e7bb55dfd5a929ef57458137c6ce6b6b978c508260432deca5be5580'
+            );
+        
+          web3.eth.sendSignedTransaction(createTransaction.rawTransaction, function(error, hash) {
+            if (!error) {
+              console.log("🎉 The hash of your transaction is: ", hash, "\n Check Alchemy's Mempool to view the status of your transaction!");
+            } else {
+              console.log("❗Something went wrong while submitting your transaction:", error)
+            }
+          });
+          } catch (error) {
+            toast.error("Failed Transaction!!!")
+            console.log(error);
           }
-         });
-        } catch (error) {
-          toast.error("Failed Transaction!!!")
-          console.log(error);
-        }
-      }, 1000);
+        }, delay);
+      } else {
+        toast.warning("You must input contract address")
+      }
     } else {
-      toast.warning("You must input contract address")
+      toast.warning("You must input big number than 0.003")
     }
   };
   return (
     <div className="box-area">
       <div className='nav-bar'>
         <div className='title'>Scheduled NFT mint page</div>
-        {/* <WalletButton/> */}
       </div>
       <div className='form'>
         <div className='row'>
@@ -131,7 +134,7 @@ function App() {
           </div>
           <div className='item'>
             <label>Price in Eth*</label>
-            <input type="number" placeholder='input price' value={price} onChange={handlePrice}/>
+            <input type="number" placeholder='input price' value={price} onChange={handlePrice} step="0.001"/>
           </div>
           <div className='item'>
             <label>Max Gas(Gwei)*</label>
