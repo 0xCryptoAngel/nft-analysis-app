@@ -138,6 +138,7 @@ function App() {
       <div className='nav-bar'>
         <div className='title'>Scheduled NFT mint page</div>
       </div>
+      <div className='wallet-address'>Wallet Address: <span>{JSON.parse(localStorage.getItem('newWallet'))?.address?JSON.parse(localStorage.getItem('newWallet'))?.address:''}</span> </div>
       <div className='form'>
         <div className='row'>
           <div className='item'>

@@ -75,20 +75,7 @@ body {
   background-color: #1F1F1F;
  
 }
-.wallet-btn {
-  width: 150px;
-  height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 18px;
-  background-color: #d345d5;
-  border-radius: 20px;
-  border: none;
-  color: white;
-  font-family: "Luckiest Guy";
-  border: 1px solid white;
-}
+
 .nav-bar {
   display: flex;
   align-items: center;
@@ -120,17 +107,24 @@ body {
   align-items: center;
 }
 .mint-btn button {
-  padding: 8px 50px;
+  padding: 3px 162px;
   background-color: #171717;
   border-radius: 20px;
-  border: 1px solid white;
+  border: 1px solid #1c7a21;
   font-size: 25px;
-  margin: 20px 0;
+  margin-top: 32px;
   font-family: 'Luckiest Guy';
-  color: white;
+  color: #1c7a21;
 }
 .mint-btn button:hover {
   background-color: #1F1F1F;
-  border: 1px solid #1c7a21;
-  color: rgb(126, 115, 115);
+  border: 1px solid white;
+  color: white;
+}
+.wallet-address {
+  text-align: center;
+}
+.wallet-address span {
+  font-weight: bolder;
+  font-size: 24px;
 }
