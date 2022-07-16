@@ -45,7 +45,7 @@ body {
   margin-top: 5px;
   color: white;
 }
-.item input[type=date] {
+.item input[type=datetime-local] {
   border-radius: 20px;
   padding: 10px 15px;
   background-color: #570472;

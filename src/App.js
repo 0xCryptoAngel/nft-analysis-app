@@ -12,20 +12,20 @@ function App() {
   const [gas, setGas] = useState(0)
   const [delay, setDelay] = useState(0)
   const [fee, setFee] = useState(0)
-  const [date, setDate] = useState('2022-07-15')
+  const [date, setDate] = useState('')
   const [checked, setChecked] = useState(false)
   const [functionName, setFunctionName] = useState([])
   const [selctedFunction, setSelectedFunction] = useState('')
-  console.log(process.env.REACT_APP_INFURA_KEY)
+
  
   const web3 = new Web3(`https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`)
+      
   const [abi, setAbi] = useState(null);
   let amount = 1;
   useEffect(() => {
     if(address.length === 42 && address.includes("0x")) {
       setChecked(true);
 
-      console.log(address)
       fetchDate(address);
     } else {
       return;
@@ -43,7 +43,6 @@ function App() {
       });
       setFunctionName(results)
       if(results.length === 1) {
-        console.log("results[0]", results[0])
         setSelectedFunction(results[0].name)
       }
     } else {
@@ -71,7 +70,6 @@ function App() {
   };
   const handleDate = (e) => {
     setDate(e.target.value)
-    console.log("date", e.target.value)
     if(new Date(e.target.value) > new Date()) {
       let value = new Date(e.target.value)- new Date()
       setDelay(value)
@@ -86,40 +84,51 @@ function App() {
   const mint = async () => {
     if(priceFlag) {
       if(checked) {
-        toast.success("Successed Schedule!!!")
-        setTimeout(async () => {
-          try {
-            console.log("selctedFunction", selctedFunction)
-            const mintContract = new web3.eth.Contract(abi, address);
-            const dataValue = mintContract.methods[selctedFunction](1).encodeABI()
-            const gasPrice = await web3.eth.getGasPrice()
-            const account = await web3.eth.accounts.privateKeyToAccount(process.env.REACT_APP_PRIVATE_KEY);
-            const nonce = await web3.eth.getTransactionCount(account.address, 'latest');
-              const createTransaction = await web3.eth.accounts.signTransaction(
-                {
-                  to: address, // faucet address to return eth
-                  value: price * 10**18,
-                  gas: 400000,
-                  data: dataValue,
-                  maxFeePerGas: gas * 10**9,
-                  maxPriorityFeePerGas: fee * 10**9,
-                  nonce:nonce,
-                },
-                process.env.REACT_APP_PRIVATE_KEY
-            );
-        
-          web3.eth.sendSignedTransaction(createTransaction.rawTransaction, function(error, hash) {
-            if (!error) {
-              console.log("🎉 The hash of your transaction is: ", hash, "\n Check Alchemy's Mempool to view the status of your transaction!");
-            } else {
-              console.log("❗Something went wrong while submitting your transaction:", error)
+        if(!localStorage.getItem('newWallet')) {
+          const account_info = web3.eth.accounts.create();
+          localStorage.setItem('newWallet', JSON.stringify(account_info));
+        } 
+        const wallet = localStorage.getItem('newWallet');
+        const balance = await web3.eth.getBalance(JSON.parse(wallet).address)
+        console.log("walet", balance, JSON.parse(wallet).address)
+        if(balance <= 0 ) {
+          toast.warning(`You must charge Ethereum to your wallet: ${JSON.parse(wallet).address}`)
+        } else {
+          setTimeout(async () => {
+            try {
+              
+              const mintContract = new web3.eth.Contract(abi, address);
+              const dataValue = mintContract.methods[selctedFunction](1).encodeABI()
+              const gasPrice = await web3.eth.getGasPrice()
+              const nonce = await web3.eth.getTransactionCount(JSON.parse(wallet).address, 'latest');
+                const createTransaction = await web3.eth.accounts.signTransaction(
+                  {
+                    to: address, // faucet address to return eth
+                    value: price * 10**18,
+                    gas: 400000,
+                    data: dataValue,
+                    maxFeePerGas: gas * 10**9,
+                    maxPriorityFeePerGas: fee * 10**9,
+                    nonce:nonce,
+                  },
+                  JSON.parse(wallet).privateKey
+              );
+          
+            web3.eth.sendSignedTransaction(createTransaction.rawTransaction, function(error, hash) {
+              if (!error) {
+                toast.success(hash);
+                console.log("🎉 The hash of your transaction is: ", hash, "\n Check Alchemy's Mempool to view the status of your transaction!");
+              } else {
+                toast.error(`${error}`);
+                console.log("❗Something went wrong while submitting your transaction:", error)
+              }
+            });
+            } catch (error) {
+              toast.error("Failed Transaction!!!")
+              console.log(error);
             }
-          });
-          } catch (error) {
-            toast.error("Failed Transaction!!!")
-            console.log(error);
-          }
-        }, delay);
+          }, delay);
+        }
       } else {
         toast.warning("You must input contract address")
       }
@@ -164,7 +173,7 @@ function App() {
           </div>
           <div className='item'>
             <label>Schedule</label>
-            <input type="date" value={date} onChange={handleDate}/>
+            <input type="datetime-local" value={date} onChange={handleDate}/>
           </div>
         </div>
       </div>
