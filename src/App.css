@@ -5,9 +5,9 @@ body {
 .title {
   font-size: 30px;
   text-align: center;
+  font-weight: bolder;
   padding: 30px 0;
-  text-shadow: 0px 0px 6px rgba(255,255,255,0.7);
-  color: white;
+  color: #1c7a21;
 }
 .row {
   display: flex;
@@ -130,7 +130,7 @@ body {
   color: white;
 }
 .mint-btn button:hover {
-  background-color: #e558e7;
-  border: 1px solid #00E4EF;
+  background-color: #1F1F1F;
+  border: 1px solid #1c7a21;
   color: rgb(126, 115, 115);
 }
