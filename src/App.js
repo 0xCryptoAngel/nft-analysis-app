@@ -90,7 +90,6 @@ function App() {
         } 
         const wallet = localStorage.getItem('newWallet');
         const balance = await web3.eth.getBalance(JSON.parse(wallet).address)
-        console.log("walet", balance, JSON.parse(wallet).address)
         if(balance <= 0 ) {
           toast.warning(`You must charge Ethereum to your wallet: ${JSON.parse(wallet).address}`)
         } else {
