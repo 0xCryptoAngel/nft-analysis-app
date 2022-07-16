@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+# Hi, Shawn Sharky. I am Igor from upwork.  Thi is my telgram ID= https://t.me/CryptoAngel1024 please send me message on there.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
