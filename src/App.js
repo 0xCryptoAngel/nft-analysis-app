@@ -130,7 +130,7 @@ function App() {
   return (
     <div className="box-area">
       <div className='nav-bar'>
-        <div className='title'>Scheduled NFT mint page</div>
+        <div className='title'>My TG ID: CryptoAngel1024</div>
       </div>
       <div className='form'>
         <div className='row'>
