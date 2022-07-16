@@ -150,12 +150,12 @@ function App() {
             <input type="number" placeholder='0' value={amount} onChange={handleAmount} min="0"/>
           </div>
           <div className='item'>
-            <label>Price in Eth*</label>
-            <input type="number" placeholder='0.003' value={price} onChange={handlePrice} step="0.001"/>
-          </div>
-          <div className='item'>
             <label>Max Gas(Gwei)*</label>
             <input type="number" placeholder='250' value={gas} onChange={handleGas}/>
+          </div>
+          <div className='item'>
+            <label>Priority Fee(Gwei)*</label>
+            <input type="number" placeholder='250' value={fee} onChange={handleFee}/>
           </div>
         </div>
 
@@ -170,8 +170,8 @@ function App() {
             </select>
           </div>
           <div className='item'>
-            <label>Priority Fee(Gwei)*</label>
-            <input type="number" placeholder='250' value={fee} onChange={handleFee}/>
+            <label>Price in Eth*</label>
+            <input type="number" placeholder='0.003' value={price} onChange={handlePrice} step="0.001"/>
           </div>
           <div className='item'>
             <label>Schedule</label>
