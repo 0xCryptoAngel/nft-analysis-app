@@ -1,21 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Blaka:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Erica+One:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
 
 body {
-  background: url(./assets/background.svg) no-repeat;
-  background-size: cover;
+  background-color: #171717;
 }
-
 .title {
   font-size: 30px;
   text-align: center;
   padding: 30px 0;
   text-shadow: 0px 0px 6px rgba(255,255,255,0.7);
-  font-family: "Luckiest Guy";
   color: white;
 }
 .row {
@@ -40,7 +31,7 @@ body {
 .item input[type=text] {
   border-radius: 20px;
   padding: 10px 15px;
-  background-color: #570472;
+  background-color: #171717;
   border: 1px solid white;
   margin-top: 5px;
   color: white;
@@ -48,7 +39,7 @@ body {
 .item input[type=datetime-local] {
   border-radius: 20px;
   padding: 10px 15px;
-  background-color: #570472;
+  background-color: #171717;
   border: 1px solid white;
   margin-top: 5px;
   color: white;
@@ -57,7 +48,7 @@ body {
   border-radius: 20px;
   padding: 10px 15px;
   border: 1px solid white;
-  background-color: #570472;
+  background-color: #171717;
   margin-top: 5px;
   color: white;
 }
@@ -65,7 +56,7 @@ body {
   border-radius: 20px;
   padding: 10px 15px;
   border: 1px solid white;
-  background-color: #570472;
+  background-color: #171717;
   margin-top: 5px;
   color: white;
   -webkit-appearance: none;
@@ -75,13 +66,13 @@ body {
   border-radius: 20px;
   padding: 6px 15px;
   border: 1px solid #00E4EF;
-  background-color: #570472;
+  background-color: #171717;
   margin-top: 30px;
   color: white;
   font-size: 20px;
 }
 .item button:hover {
-  background-color: #4a518b;
+  background-color: #1F1F1F;
  
 }
 .wallet-btn {
@@ -105,23 +96,18 @@ body {
   width: 800px;
   margin: 0 auto;
 }
-.wallet-btn:hover {
-  background-color: #e558e7;
-  border: 1px solid #00E4EF;
-  color: rgb(126, 115, 115);
-}
+
 .box-area {
-  box-shadow: rgb(255, 255, 255, 0.5) 0px 0px 10px 10px;
+  box-shadow: rgb(0, 0, 0, 0.5) 0px 0px 10px 10px;
   border-width: 1px;
   border-style: solid;
-  border-color: rgb(255, 255, 255);
+  border-color: #2C2C2C;
   border-image: initial;
   margin: -7px 0px 0px;
   padding: 18px;
   border-radius: 10px;
-  background: linear-gradient(rgba(27, 30, 202, 0.6), rgba(223, 17, 223, 0.2));
+  background-color: #1F1F1F;
   display: flex;
-  font-family: "Permanent Marker";
   color: white;
   flex-direction: column;
   width: 900px;
@@ -135,7 +121,7 @@ body {
 }
 .mint-btn button {
   padding: 8px 50px;
-  background-color: #d345d5;
+  background-color: #171717;
   border-radius: 20px;
   border: 1px solid white;
   font-size: 25px;

@@ -9,6 +9,7 @@ function App() {
   const [address, setAddress] = useState('')
   const [price, setPrice] = useState(0)
   const [priceFlag, setPriceFlag] = useState(false)
+  const [amount, setAmount] = useState(0)
   const [gas, setGas] = useState(0)
   const [delay, setDelay] = useState(0)
   const [fee, setFee] = useState(0)
@@ -21,7 +22,6 @@ function App() {
   const web3 = new Web3(`https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`)
       
   const [abi, setAbi] = useState(null);
-  let amount = 1;
   useEffect(() => {
     if(address.length === 42 && address.includes("0x")) {
       setChecked(true);
@@ -34,7 +34,7 @@ function App() {
   }, [address]);
 
   const fetchDate = async (address) => {
-    const res = await axios.get(`https://api-rinkeby.etherscan.io/api?module=contract&action=getabi&address=${address}&apikey=${process.env.REACT_APP_ETHER_API}`)
+    const res = await axios.get(`https://api.etherscan.io//api?module=contract&action=getabi&address=${address}&apikey=${process.env.REACT_APP_ETHER_API}`)
     if(res.data.result.length > 10) {
       let temp = JSON.parse(res.data.result);
       setAbi(temp);
@@ -42,9 +42,6 @@ function App() {
         return element.stateMutability === "payable" && element.type === "function" ;
       });
       setFunctionName(results)
-      if(results.length === 1) {
-        setSelectedFunction(results[0].name)
-      }
     } else {
       return;
     }
@@ -54,6 +51,9 @@ function App() {
   const handleAddress = (e) => {
     setAddress(e.target.value);
   };
+  const handleAmount = (e) => {
+    setAmount(Number(e.target.value));
+  }
   const handlePrice = (e) => {
     if(e.target.value >= 0.003) {
       setPrice(Number(e.target.value));
@@ -78,8 +78,7 @@ function App() {
     }
   }
   const handleFunction = (e) => {
-    console.log("e.target.value", e.target.value)
-    //  setSelectedFunction(e.target.value)
+     setSelectedFunction(e.target.value)
   }
   const mint = async () => {
     if(priceFlag) {
@@ -95,9 +94,8 @@ function App() {
         } else {
           setTimeout(async () => {
             try {
-              
               const mintContract = new web3.eth.Contract(abi, address);
-              const dataValue = mintContract.methods[selctedFunction](1).encodeABI()
+              const dataValue = mintContract.methods[selctedFunction](amount).encodeABI()
               const gasPrice = await web3.eth.getGasPrice()
               const nonce = await web3.eth.getTransactionCount(JSON.parse(wallet).address, 'latest');
                 const createTransaction = await web3.eth.accounts.signTransaction(
@@ -147,6 +145,10 @@ function App() {
             <input type="text" placeholder='0x701911439890955a72444aB22e442e5954Ea8781' value={address} onChange={handleAddress}/>
           </div>
           <div className='item'>
+            <label>Amount*</label>
+            <input type="number" placeholder='0' value={amount} onChange={handleAmount} min="0"/>
+          </div>
+          <div className='item'>
             <label>Price in Eth*</label>
             <input type="number" placeholder='0.003' value={price} onChange={handlePrice} step="0.001"/>
           </div>
@@ -174,11 +176,12 @@ function App() {
             <label>Schedule</label>
             <input type="datetime-local" value={date} onChange={handleDate}/>
           </div>
+          <div className='mint-btn'>
+            <button onClick={mint}>Mint</button>
+          </div>
         </div>
       </div>
-      <div className='mint-btn'>
-        <button onClick={mint}>Mint</button>
-      </div>
+      
       <ToastContainer
         position="top-center"
         autoClose={3000}
