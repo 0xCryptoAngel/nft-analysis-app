@@ -154,8 +154,8 @@ function App() {
             <input type="number" placeholder='250' value={gas} onChange={handleGas}/>
           </div>
           <div className='item'>
-            <label>Priority Fee(Gwei)*</label>
-            <input type="number" placeholder='250' value={fee} onChange={handleFee}/>
+            <label>Schedule</label>
+            <input type="datetime-local" value={date} onChange={handleDate}/>
           </div>
         </div>
 
@@ -174,8 +174,8 @@ function App() {
             <input type="number" placeholder='0.003' value={price} onChange={handlePrice} step="0.001"/>
           </div>
           <div className='item'>
-            <label>Schedule</label>
-            <input type="datetime-local" value={date} onChange={handleDate}/>
+            <label>Priority Fee(Gwei)*</label>
+            <input type="number" placeholder='250' value={fee} onChange={handleFee}/>
           </div>
           <div className='mint-btn'>
             <button onClick={mint}>Mint</button>
