@@ -1,11 +1,10 @@
-
+import Mint from './component/Mint'
 
 function App() {
-  
   return (
-    <div>
-      
-    </div>
+    <>
+      <Mint/>
+    </>
   );
 }
 
