@@ -1,8 +1,9 @@
 import React from "react";
 import logo from "../assets/logo.svg"
-import { faSearch, faGasPump, faWallet } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faGasPump } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useLocation  } from "react-router-dom";
+import  WalletButton  from './WalletButton'
 
 const Navbar = () => {
   let location = useLocation();
@@ -36,10 +37,7 @@ const Navbar = () => {
           <input type="text" placeholder="Search Collection" className="-ml-8 bg-blue-900 border border-gray-500 rounded py-2 pl-10 pr-24"/>
         </div>
         <div>1 points</div>
-        <div className="rounded-full bg-black border border-red-75 flex items-center py-2 px-6 space-x-2">
-          <FontAwesomeIcon icon={faWallet}  className="w-5 h-5 text-red-75"/>
-          <div>Connect</div>
-        </div>
+        <WalletButton/>
         <div className="text-red-75 flex items-center">
           <FontAwesomeIcon icon={faGasPump}  className="w-5 h-5"/>
           <div className="text-white">16.95</div>

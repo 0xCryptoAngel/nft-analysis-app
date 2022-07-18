@@ -4,6 +4,9 @@ import App from './App';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import Navbar from './component/Navbar'
+import { Web3ReactProvider } from '@web3-react/core';
+import { getLibrary } from './wallet/wallet'
+import MetamaskProvider from './wallet/useEagerConnect'
 import {
   BrowserRouter,
   Routes,
@@ -12,12 +15,16 @@ import {
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Navbar/>
-      <Routes>
-        <Route path="/" element={<App />} />
-      </Routes>
-    </BrowserRouter>
+    <Web3ReactProvider getLibrary={getLibrary}>
+      <MetamaskProvider>
+        <BrowserRouter>
+          <Navbar/>
+          <Routes>
+            <Route path="/" element={<App />} />
+          </Routes>
+        </BrowserRouter>
+      </MetamaskProvider>
+    </Web3ReactProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
