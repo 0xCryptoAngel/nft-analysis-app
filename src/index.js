@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import Navbar from './component/Navbar'
+import WalletManager from './page/WalletManager'
+import Mint from './page/Mint'
 import { Web3ReactProvider } from '@web3-react/core';
 import { getLibrary } from './wallet/wallet'
 import MetamaskProvider from './wallet/useEagerConnect'
@@ -20,7 +21,8 @@ ReactDOM.render(
         <BrowserRouter>
           <Navbar/>
           <Routes>
-            <Route path="/" element={<App />} />
+            <Route path="/" element={<Mint />} />
+            <Route path="/wallet-manager" element={<WalletManager/>} />
           </Routes>
         </BrowserRouter>
       </MetamaskProvider>

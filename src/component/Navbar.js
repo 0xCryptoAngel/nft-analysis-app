@@ -24,8 +24,8 @@ const Navbar = () => {
           <Link to="/">
             <li className={"border-b-4  hover:border-red-75  py-4 " + (location.pathname === '/' ? 'border-red-75' : 'border-blue-900')}>Mint Bot</li>
           </Link>
-          <Link to="/#">
-            <li className="border-b-4 border-blue-900 hover:border-red-75  py-4">Wallet Manager</li>
+          <Link to="/wallet-manager">
+            <li className={"border-b-4  hover:border-red-75  py-4 " + (location.pathname === '/wallet-manager' ? 'border-red-75' : 'border-blue-900')}>Wallet Manager</li>
           </Link>
         </ul>
       </div>

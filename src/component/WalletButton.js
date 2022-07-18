@@ -5,7 +5,7 @@ import MetaIcon from '../assets/meta.png'
 import WalletConnect from '../assets/wallet.svg'
 import { faWallet } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import Modal from './Modal';
 const WalletButton = () => {
   const [modalShow, setModalShow] = useState(false)
   const { active, activate, deactivate, account, error } = useWeb3React()
@@ -42,6 +42,7 @@ const WalletButton = () => {
   const WalletConnector = ({ show, onHide }) => {
     return (
       <Modal show={show} handleClose={onHide}>
+        <div className="font-bold text-white text-2xl text-center py-2">Connect Wallet</div>
         <div
           className="hover:bg-blue-850 border rounded-xl my-3 hover:border-blue-450"
           onClick={() => {
@@ -67,23 +68,13 @@ const WalletButton = () => {
             <div className='text-xl'>
               WalletConnect
             </div>
-            <img className='w-8 h-8' src={WalletConnect} alt="DeFi Wallet" />
+            <img className='w-8 h-8 ml-24' src={WalletConnect} alt="DeFi Wallet" />
           </div>
         </div>
       </Modal>
     )
   }
-  const Modal = ({ handleClose, show, children }) => {
-    const showHideClassName = show ? "block" : "hidden";
-    return (
-      <div className={`bg-black bg-opacity-70 w-full h-full flex justify-center items-center fixed top-0 left-0 z-20 modal ${showHideClassName}`} onClick={handleClose}>
-        <section className=" bg-blue-900 z-50 rounded-xl pb-6 pt-4 px-4 relative w-96">
-          <div className="font-bold text-white text-2xl text-center py-2">Connect Wallet</div>
-          {children}
-        </section>
-      </div>
-    );
-  };
+
   return (
     <>
       {!active ? (

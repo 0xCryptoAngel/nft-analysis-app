@@ -1,6 +1,5 @@
-import React from "react";
-import '../App.css';
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect }  from "react";
+import './Mint.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
