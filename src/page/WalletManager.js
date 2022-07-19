@@ -28,8 +28,8 @@ const WalletManager = () => {
       setWalletInfo(data)
     }
   }
-  const check = () => {
-    console.log("walletInfo", walletInfo)
+  const saveWallets = () => {
+    console.log("selectedAmount", selectedAmount)
   }
   
   const walletAmount = [1, 2, 3, 5, 10, 20, 50, 100]
@@ -47,14 +47,14 @@ const WalletManager = () => {
             )}
           </div>
         </div>
-        <div className="py-4">
+        <div className="h-72 overflow-y-auto my-4">
           {walletInfo}
         </div>
         <div className="flex justify-center">
           <div
             className="bg-red-75 py-2 px-4"
             onClick={
-              check
+              saveWallets
             }
           > 
           Save Wallets
@@ -69,6 +69,10 @@ const WalletManager = () => {
       <div className="flex justify-between items-center px-8">
         <div className="text-2xl">WALLET MANAGER</div>
         <button className="bg-red-75 px-4 py-2" onClick={() => setModalShow(true)}>Generate Wallet</button>
+      </div>
+      <div>
+      {walletInfo}
+      
       </div>
       <GenerateWallet show={modalShow} onHide={() => setModalShow(false)}/>
     </div>
