@@ -4,6 +4,7 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import Navbar from './component/Navbar'
 import WalletManager from './page/WalletManager'
+import Collections from './page/Collections'
 import Mint from './page/Mint'
 import { Web3ReactProvider } from '@web3-react/core';
 import { getLibrary } from './wallet/wallet'
@@ -23,6 +24,7 @@ ReactDOM.render(
           <Routes>
             <Route path="/" element={<Mint />} />
             <Route path="/wallet-manager" element={<WalletManager/>} />
+            <Route path="/collections" element={<Collections/>} />
           </Routes>
         </BrowserRouter>
       </MetamaskProvider>

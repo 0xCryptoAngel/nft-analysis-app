@@ -15,8 +15,8 @@ const Navbar = () => {
           <div className="w-10 h-10"><img src={logo} alt="logo" /></div>
         </Link>
         <ul className="flex space-x-10">
-          <Link to="/#">
-            <li className="border-b-4 border-blue-900 hover:border-red-75 py-4">Collections</li>
+          <Link to="/collections">
+            <li className={"border-b-4  hover:border-red-75  py-4 " + (location.pathname === '/collections' ? 'border-red-75' : 'border-blue-900')}>Collections</li>
           </Link>
           <Link to="/#">
             <li className="border-b-4 border-blue-900 hover:border-red-75  py-4"> Deal Sinper</li>
