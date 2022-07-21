@@ -9,7 +9,7 @@ const Navbar = () => {
   let location = useLocation();
 
   return (
-    <div className="text-white flex items-center border-b border-gray-500 justify-between px-8">
+    <div className="text-white flex items-center border-b border-blue-830 justify-between px-8">
       <div className="flex items-center space-x-16">
         <Link to="/">
           <div className=""><img src={logo} alt="logo" className="w-10 h-10 rounded-full" /></div>
@@ -19,7 +19,7 @@ const Navbar = () => {
             <li className={"border-b-4  hover:border-blue-460 py-4 " + (location.pathname === '/collections' ? 'border-blue-460' : 'border-blue-840')}>Collections</li>
           </Link>
           <Link to="/#">
-            <li className="border-b-4 border-blue-900 hover:border-blue-460  py-4"> Deal Sinper</li>
+            <li className="border-b-4 border-blue-840 hover:border-blue-460  py-4"> Deal Sinper</li>
           </Link>
           <Link to="/">
             <li className={"border-b-4  hover:border-blue-460  py-4 " + (location.pathname === '/' ? 'border-blue-460' : 'border-blue-840')}>Mint Bot</li>

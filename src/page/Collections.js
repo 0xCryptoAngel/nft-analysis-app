@@ -16,14 +16,14 @@ const Collections =  () => {
     setCollection(openSeaData.data.collections)
   }
   return (
-    <div className="">
+    <div className="px-6">
       {load? 
         <div className="flex justify-center items-center h-screen">
           <img src={loading} alt="load" className="w-24 h-24"/>
         </div>:
-        <table className="w-full text-white ">
-          <thead className="bg-blue-830 text-left">
-            <tr>
+        <table className="w-full text-white mt-12 ">
+          <thead className="bg-blue-830 text-left pointer-events-none">
+            <tr className="pointer-events-none">
               <th className="py-4 pl-8">Collections</th>
               <th>Floor</th>
             </tr>
