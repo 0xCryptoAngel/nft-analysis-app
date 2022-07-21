@@ -14,6 +14,11 @@ module.exports = {
       colors: {
         blue: {
           450: '#3481F0',
+          460: '#37AEC4',
+          810: '#1C1C33',
+          820: '#353554',
+          830: '#14142B',
+          840: '#05050F',
           900: '#171717',
           850: '#1F1F1F',
         },
@@ -29,7 +34,10 @@ module.exports = {
       },
       boxShadow: {
         '5xl': '5px 10px 20px blue inset, -5px -10px 20px blue inset',
-      }
+      },
+      variants: {
+        backgroundColor: ['responsive', 'even'],
+      },
     },
   },
   variants: {

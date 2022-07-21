@@ -32,11 +32,23 @@ code {
  
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #1F1F1F; 
+  background: #6d9deb; 
   border-radius: 5px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #191919; 
+  background: #5e92e6; 
 }
+
+.gradient-border {
+  border: 1px solid;
+  border-image: linear-gradient(90deg, #34d399, #3b82f6) 1;
+}
+tr:nth-child(even) {
+  background-color: #1C1C33;
+}
+tr:hover {
+  background-color: #353554;
+}
+

@@ -19,7 +19,7 @@ const WalletManager = () => {
   const [walletInfo, setWalletInfo] = useState([])
   const [walletData, setWalletData] = useState([])
   const [manager, setManager] = useState([])
-  const web3 = new Web3(`https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`)
+  const web3 = new Web3(`https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`)
   useEffect(()=> {
     setCollection(cloneDeep(manager.slice(0, 10)));
   }, [manager])
@@ -28,6 +28,14 @@ const WalletManager = () => {
     setSelectedAmount(index)
     const account_info = web3.eth.accounts.wallet.create(index);
     const data = Object.values(account_info)?.slice(0, index);
+    const updatedData = data.map((item)=>{
+      return {
+        ...item,
+        balance: web3.eth.getBalance(item.address),
+      }
+    })
+    console.log("data", updatedData[0].balance)
+    // 
     setWalletData(data);
   }
   const saveWallets = () => {
@@ -42,7 +50,7 @@ const WalletManager = () => {
           <div>How many wallets?</div>
           <div className="flex mr-96">
             {walletAmount.map((item, i) => 
-              <button className="w-8 h-8 border hover:text-red-75" onClick={()=>createWallet(item)} key={i}>
+              <button className="w-8 h-8 border hover:text-white font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500" onClick={()=>createWallet(item)} key={i}>
                 <div>{item}</div>
               </button>
             )}
@@ -50,7 +58,7 @@ const WalletManager = () => {
         </div>
         <div className="h-72 overflow-y-auto my-4">
           {walletData.map((item, i) => (
-            <div className="flex justify-between bg-blue-850 py-3 px-4 my-1" key={i}>
+            <div className="flex justify-between bg-blue-820 border hover:border-blue-400 border-blue-850 py-3 px-4 my-1" key={i}>
               <div  className="w-16">Wallet{i + 1}</div>
               <div className="w-28">{formatData(item.address)}</div>
               <div  className="w-16">&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;</div>
@@ -59,9 +67,11 @@ const WalletManager = () => {
         </div>
         <div className="flex justify-center">
           <div
-            className="bg-red-75 py-2 px-4"
-            onClick={
-              saveWallets
+            className="bg-gradient-to-r from-green-400 to-blue-500 rounded py-2 px-4"
+            onClick={()=> {
+                saveWallets(); 
+                setModalShow(false);
+              }
             }
           > 
           Add to Manager
@@ -86,14 +96,14 @@ const WalletManager = () => {
     <div className="text-white pt-8">
       <div className="flex justify-between items-center px-8">
         <div className="text-2xl">WALLET MANAGER</div>
-        <button className="bg-red-75 px-4 py-2" onClick={() => setModalShow(true)}>Generate Wallet</button>
+        <button className="bg-gradient-to-r from-green-400 to-blue-500 rounded px-4 py-2" onClick={() => setModalShow(true)}>Generate Wallet</button>
       </div>
       <div>
-      <div className="px-8 py-8"> 
+      <div className="m-8 border"> 
         <table className="w-full">
-          <thead className="bg-blue-850">
-            <tr>
-              <th>Wallet Name</th>
+          <thead className="bg-blue-830">
+            <tr className="pointer-events-none">
+              <th className="py-3">Wallet Name</th>
               <th>Tag</th>
               <th>Total Balance</th>
               <th>ETH</th>
@@ -103,15 +113,15 @@ const WalletManager = () => {
           </thead>
           {collection && 
             <tbody>{collection.map((item, i) => 
-              <tr key={i}>
+              <tr key={i} className="text-center">
                 <td>Wallet Name{item.index + 1}</td>
                 <td>{formatData(item.address)}</td>
                 <td>q</td>
                 <td>q</td>
                 <td>&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;</td>
-                <td>
+                <td className="py-2">
                   <div className="flex flex-col items-center">
-                    <button className="rounded-full bg-white w-6 h-6 flex justify-center items-center" onClick={()=>deleteItem(item.index)}>
+                    <button className="rounded-full bg-white hover:bg-blue-820 hover:text-white w-6 h-6 flex justify-center items-center" onClick={()=>deleteItem(item.index)}>
                       <FontAwesomeIcon icon={faTrash}  className="w-3 h-3 text-black"/>
                     </button>
                     <div className="text-xs text-white">Delete</div>
@@ -121,7 +131,7 @@ const WalletManager = () => {
             </tbody>
           }
         </table>
-        <div className="bg-blue-850 py-2 flex justify-center">
+        <div className="bg-blue-830 py-3 flex justify-center">
           <Pagination
             pageSize={countPerPage}
             onChange={updatePage}

@@ -78,11 +78,13 @@ const WalletButton = () => {
   return (
     <>
       {!active ? (
-        <button className="rounded-full border border-red-75 flex items-center py-2 px-10 bg-blue-900" onClick={() => setModalShow(true)}>
-          <div>{isUnsupportedChain ? 'Switch to Chain' : 'Connect'}</div>
-        </button>
+        <div className='bg-gradient-to-r from-green-400 to-blue-500 rounded-full'>
+          <button className="rounded-full flex items-center py-2 px-10 bg-blue-900 m-0.5" onClick={() => setModalShow(true)}>
+            <div>{isUnsupportedChain ? 'Switch to Chain' : 'Connect'}</div>
+          </button>
+        </div>
       ) : (
-        <button className="rounded-full bg-black border border-red-75 flex items-center py-2 px-6 space-x-2" onClick={handleDisconnect}>
+        <button className="rounded-full bg-black gradient-border flex items-center py-2 px-6 space-x-2" onClick={handleDisconnect}>
           <FontAwesomeIcon icon={faWallet}  className="w-5 h-5 text-red-75"/>
           <div>{`${account.slice(0, -38)}...${account.substring(40)}`}</div>
         </button>

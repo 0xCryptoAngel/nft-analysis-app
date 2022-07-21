@@ -19,7 +19,7 @@ const Mint = () => {
   const [selctedFunction, setSelectedFunction] = useState('')
 
   
-  const web3 = new Web3(`https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`)
+  const web3 = new Web3(`https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`)
       
   const [abi, setAbi] = useState(null);
   useEffect(() => {
