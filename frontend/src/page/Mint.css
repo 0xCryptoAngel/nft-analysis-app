@@ -1,0 +1,130 @@
+
+body {
+  background-color: #05050F;
+}
+.title {
+  font-size: 30px;
+  text-align: center;
+  font-weight: bolder;
+  padding: 30px 0;
+  color: #1c7a21;
+}
+.row {
+  display: flex;
+  flex-direction: column;
+  width: 380px;
+}
+.form {
+  display: flex;
+  width: 800px;
+  margin: 0 auto;
+  font-size: 20px;
+  justify-content: space-between;
+}
+.item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 5px 0;
+
+}
+.item input[type=text] {
+  border-radius: 20px;
+  padding: 10px 15px;
+  background-color: #171717;
+  border: 1px solid white;
+  margin-top: 5px;
+  color: white;
+}
+.item input[type=datetime-local] {
+  border-radius: 20px;
+  padding: 10px 15px;
+  background-color: #171717;
+  border: 1px solid white;
+  margin-top: 5px;
+  color: white;
+}
+.item input[type=number] {
+  border-radius: 20px;
+  padding: 10px 15px;
+  border: 1px solid white;
+  background-color: #171717;
+  margin-top: 5px;
+  color: white;
+}
+.item select {
+  border-radius: 20px;
+  padding: 10px 15px;
+  border: 1px solid white;
+  background-color: #171717;
+  margin-top: 5px;
+  color: white;
+  -webkit-appearance: none;
+}
+
+.item button {
+  border-radius: 20px;
+  padding: 6px 15px;
+  border: 1px solid #00E4EF;
+  background-color: #171717;
+  margin-top: 30px;
+  color: white;
+  font-size: 20px;
+}
+.item button:hover {
+  background-color: #1F1F1F;
+ 
+}
+
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 800px;
+  margin: 0 auto;
+}
+
+.box-area {
+  box-shadow: rgb(0, 0, 0, 0.5) 0px 0px 10px 10px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #2C2C2C;
+  border-image: initial;
+  margin: -7px 0px 0px;
+  padding: 18px;
+  border-radius: 10px;
+  background-color: #1F1F1F;
+  display: flex;
+  color: white;
+  flex-direction: column;
+  width: 900px;
+  margin: 0 auto;
+  margin-top: 200px;
+}
+.mint-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.mint-btn button {
+  padding: 3px 162px;
+  background-color: #171717;
+  border-radius: 20px;
+  border: 1px solid #1c7a21;
+  font-size: 25px;
+  margin-top: 32px;
+  font-family: 'Luckiest Guy';
+  color: #1c7a21;
+}
+.mint-btn button:hover {
+  background-color: #1F1F1F;
+  border: 1px solid white;
+  color: white;
+}
+.wallet-address {
+  text-align: center;
+}
+.wallet-address span {
+  font-weight: bolder;
+  font-size: 24px;
+}
