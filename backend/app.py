@@ -6,11 +6,10 @@ app = Flask(__name__)
 api = Api(app)
 
 app.url_map.strict_slashes = False # Disable redirecting on POST method from /star to /star/
-
 class Collection(Resource):
   def get(self):
     output = []
-    for data in db.trades.find().limit(20):
+    for data in db.trades.find().sort("event_time", -1).limit(50):
       output.append({
         '_id': str(data['_id']),
         'collection_slug': data['collection_slug'], 

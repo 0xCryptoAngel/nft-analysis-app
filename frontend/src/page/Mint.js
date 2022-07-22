@@ -1,5 +1,4 @@
 import React, { useState, useEffect }  from "react";
-import './Mint.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
@@ -134,66 +133,64 @@ const Mint = () => {
     }
   };
   return (
-    <div className="box-area">
-      <div className='nav-bar'>
-        <div className='title'>Scheduled NFT mint page</div>
-      </div>
-      <div className='wallet-address'>Wallet Address: <span>{JSON.parse(localStorage.getItem('newWallet'))?.address?JSON.parse(localStorage.getItem('newWallet'))?.address:''}</span> </div>
-      <div className='form'>
-        <div className='row'>
-          <div className='item'>
-            <label>Contract*</label>
-            <input type="text" placeholder='0x701911439890955a72444aB22e442e5954Ea8781' value={address} onChange={handleAddress}/>
+    <div className="mt-24 flex justify-center">
+      <div className="bg-blue-830 p-8">
+        <div className="flex text-white">
+          <div className='flex flex-col pr-4'>
+            <div className='flex flex-col w-80 my-2'>
+              <label className="text-lg">Contract*</label>
+              <input className="p-2 bg-blue-820 rounded" type="text" placeholder='0x701911439890955a72444aB22e442e5954Ea8781' value={address} onChange={handleAddress}/>
+            </div>
+            <div className='flex flex-col my-2'>
+              <label className="text-lg">Amount*</label>
+              <input className="p-2 bg-blue-820 rounded"  type="number" placeholder='0' value={amount} onChange={handleAmount} min="0"/>
+            </div>
+            <div className='flex flex-col my-2'>
+              <label className="text-lg">Max Gas(Gwei)*</label>
+              <input className="p-2 bg-blue-820 rounded"  type="number" placeholder='250' value={gas} onChange={handleGas}/>
+            </div>
+            <div className='flex flex-col my-2'>
+              <label className="text-lg">Schedule</label>
+              <input className="p-2 bg-gradient-to-r from-green-400 to-blue-500 rounded"  type="datetime-local" value={date} onChange={handleDate}/>
+            </div>
           </div>
-          <div className='item'>
-            <label>Amount*</label>
-            <input type="number" placeholder='0' value={amount} onChange={handleAmount} min="0"/>
-          </div>
-          <div className='item'>
-            <label>Max Gas(Gwei)*</label>
-            <input type="number" placeholder='250' value={gas} onChange={handleGas}/>
-          </div>
-          <div className='item'>
-            <label>Schedule</label>
-            <input type="datetime-local" value={date} onChange={handleDate}/>
-          </div>
-        </div>
 
-        <div className='row'>
-          <div className='item'>
-            <label>Function Name*</label>
-            <select className=""  onChange={handleFunction}  value={selctedFunction} >
-              {functionName.map((item) => (
-                <option key={item.name} value={item.name}>{item.name}</option>
-              )
-              )}
-            </select>
-          </div>
-          <div className='item'>
-            <label>Price in Eth*</label>
-            <input type="number" placeholder='0.003' value={price} onChange={handlePrice} step="0.001"/>
-          </div>
-          <div className='item'>
-            <label>Priority Fee(Gwei)*</label>
-            <input type="number" placeholder='250' value={fee} onChange={handleFee}/>
-          </div>
-          <div className='mint-btn'>
-            <button onClick={mint}>Mint</button>
+          <div className='flex flex-col pl-4'>
+            <div className='flex flex-col w-80 my-2'>
+              <label className="text-lg">Function Name*</label>
+              <select className="p-2 bg-blue-820 rounded"   onChange={handleFunction}  value={selctedFunction} >
+                {functionName.map((item) => (
+                  <option key={item.name} value={item.name}>{item.name}</option>
+                )
+                )}
+              </select>
+            </div>
+            <div className='flex flex-col my-2'>
+              <label className="text-lg">Price in Eth*</label>
+              <input className="p-2 bg-blue-820 rounded"  type="number" placeholder='0.003' value={price} onChange={handlePrice} step="0.001"/>
+            </div>
+            <div className='flex flex-col my-2'>
+              <label className="text-lg">Priority Fee(Gwei)*</label>
+              <input className="p-2 bg-blue-820 rounded"  type="number" placeholder='250' value={fee} onChange={handleFee}/>
+            </div>
+            <div className='mint-btn mt-9 py-1 bg-gradient-to-r from-green-400 to-blue-500  hover:text-red-75 text-2xl text-center rounded'>
+              <button onClick={mint}>Mint</button>
+            </div>
           </div>
         </div>
+        
+        <ToastContainer
+          position="top-center"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          />
       </div>
-      
-      <ToastContainer
-        position="top-center"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        />
     </div>
   );
 };

@@ -1,13 +1,20 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../assets/logo.jpg"
 import { faSearch, faGasPump } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useLocation  } from "react-router-dom";
 import  WalletButton  from './WalletButton'
+import Web3 from 'web3'
 
 const Navbar = () => {
   let location = useLocation();
-
+  const [gas, setGas] = useState(0)
+  const web3 = new Web3(`https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`)
+  useEffect(()=>
+    web3.eth.getGasPrice().then((result) => {
+      setGas(web3.utils.fromWei(result, 'Gwei'))
+    })
+  )
   return (
     <div className="text-white flex items-center border-b border-blue-830 justify-between px-8">
       <div className="flex items-center space-x-16">
@@ -19,7 +26,7 @@ const Navbar = () => {
             <li className={"border-b-4  hover:border-blue-460 py-4 " + (location.pathname === '/collections' ? 'border-blue-460' : 'border-blue-840')}>Collections</li>
           </Link>
           <Link to="/#">
-            <li className="border-b-4 border-blue-840 hover:border-blue-460  py-4"> Deal Sinper</li>
+            <li className="border-b-4 border-blue-840 hover:border-blue-460  py-4">Snipe Bot</li>
           </Link>
           <Link to="/">
             <li className={"border-b-4  hover:border-blue-460  py-4 " + (location.pathname === '/' ? 'border-blue-460' : 'border-blue-840')}>Mint Bot</li>
@@ -38,7 +45,7 @@ const Navbar = () => {
         </div>
         <div className="text-blue-460  flex items-center">
           <FontAwesomeIcon icon={faGasPump}  className="w-5 h-5"/>
-          <div className="text-white">16.95</div>
+          <div className="text-white pl-2">{gas > 0 ? Number(gas).toFixed(2) : 0 }</div>
         </div>
         <WalletButton/>
       </div>

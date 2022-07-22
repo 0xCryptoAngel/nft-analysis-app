@@ -7,6 +7,7 @@ import "rc-pagination/assets/index.css";
 import cloneDeep from "lodash/cloneDeep";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { result } from "lodash";
 
 const WalletManager = () => {
   const countPerPage = 10;
@@ -28,13 +29,14 @@ const WalletManager = () => {
     setSelectedAmount(index)
     const account_info = web3.eth.accounts.wallet.create(index);
     const data = Object.values(account_info)?.slice(0, index);
-    const updatedData = data.map((item)=>{
+    const updatedData = data.map( async (item)=>{
+      let balance =  await web3.eth.getBalance(item.address)
       return {
         ...item,
-        balance: web3.eth.getBalance(item.address),
+        balance: balance,
       }
     })
-    console.log("data", updatedData[0].balance)
+    console.log("data", updatedData)
     // 
     setWalletData(data);
   }
@@ -107,7 +109,6 @@ const WalletManager = () => {
               <th>Tag</th>
               <th>Total Balance</th>
               <th>ETH</th>
-              <th>WETH</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -116,8 +117,7 @@ const WalletManager = () => {
               <tr key={i} className="text-center">
                 <td>Wallet Name{item.index + 1}</td>
                 <td>{formatData(item.address)}</td>
-                <td>q</td>
-                <td>q</td>
+                <td>0</td>
                 <td>&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;</td>
                 <td className="py-2">
                   <div className="flex flex-col items-center">
