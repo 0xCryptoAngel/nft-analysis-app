@@ -17,22 +17,22 @@ const Navbar = () => {
   )
   return (
     <div className="text-white flex items-center border-b border-blue-830 justify-between px-8">
-      <div className="flex items-center space-x-16">
-        <Link to="/">
+      <div className="flex items-center space-x-12">
+        <Link to="/" className="bg-white w-12 h-12 rounded-full flex justify-center items-center">
           <div className=""><img src={logo} alt="logo" className="w-10 h-10 rounded-full" /></div>
         </Link>
         <ul className="flex space-x-10">
           <Link to="/collections">
-            <li className={"border-b-4  hover:border-blue-460 py-4 " + (location.pathname === '/collections' ? 'border-blue-460' : 'border-blue-840')}>Collections</li>
+            <li className={"border-b-4  hover:border-blue-460 py-6 " + (location.pathname === '/collections' ? 'border-blue-460' : 'border-blue-840')}>Collections</li>
           </Link>
           <Link to="/#">
-            <li className="border-b-4 border-blue-840 hover:border-blue-460  py-4">Snipe Bot</li>
+            <li className="border-b-4 border-blue-840 hover:border-blue-460  py-6">Snipe Bot</li>
           </Link>
           <Link to="/">
-            <li className={"border-b-4  hover:border-blue-460  py-4 " + (location.pathname === '/' ? 'border-blue-460' : 'border-blue-840')}>Mint Bot</li>
+            <li className={"border-b-4  hover:border-blue-460  py-6 " + (location.pathname === '/' ? 'border-blue-460' : 'border-blue-840')}>Mint Bot</li>
           </Link>
           <Link to="/wallet-manager">
-            <li className={"border-b-4  hover:border-blue-460  py-4 " + (location.pathname === '/wallet-manager' ? 'border-blue-460' : 'border-blue-840')}>Wallet Manager</li>
+            <li className={"border-b-4  hover:border-blue-460  py-6 " + (location.pathname === '/wallet-manager' ? 'border-blue-460' : 'border-blue-840')}>Wallet Manager</li>
           </Link>
         </ul>
       </div>
@@ -41,7 +41,7 @@ const Navbar = () => {
           <div className="text-blue-460 relative z-10 flex items-center">
             <FontAwesomeIcon icon={faSearch}  className="w-5 h-5"/>
           </div>
-          <input type="text" placeholder="Search Collection" className="-ml-8 bg-blue-900 border border-gray-500 rounded py-2 pl-10 pr-24"/>
+          <input type="text" placeholder="Search Collection" className="-ml-8 bg-blue-830 border border-gray-500 rounded py-2 pl-10 pr-24"/>
         </div>
         <div className="text-blue-460  flex items-center">
           <FontAwesomeIcon icon={faGasPump}  className="w-5 h-5"/>

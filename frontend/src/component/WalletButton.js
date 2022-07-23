@@ -84,10 +84,12 @@ const WalletButton = () => {
           </button>
         </div>
       ) : (
-        <button className="rounded-full bg-black gradient-border flex items-center py-2 px-6 space-x-2" onClick={handleDisconnect}>
-          <FontAwesomeIcon icon={faWallet}  className="w-5 h-5 text-red-75"/>
-          <div>{`${account.slice(0, -38)}...${account.substring(40)}`}</div>
-        </button>
+        <div className='bg-gradient-to-r from-green-400 to-blue-500 rounded-full'>
+          <button className="rounded-full flex items-center py-2 px-6 bg-blue-900 m-0.5 space-x-2" onClick={handleDisconnect}>
+            <FontAwesomeIcon icon={faWallet}  className="w-5 h-5 text-blue-460"/>
+            <div>{`${account.slice(0, -38)}...${account.substring(40)}`}</div>
+          </button>
+        </div>
       )}
       <WalletConnector show={modalShow} onHide={() => setModalShow(false)} />
     </>
