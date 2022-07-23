@@ -173,7 +173,7 @@ const Mint = () => {
               <label className="text-lg">Priority Fee(Gwei)*</label>
               <input className="p-2 bg-blue-820 rounded"  type="number" placeholder='250' value={fee} onChange={handleFee}/>
             </div>
-            <div className='mint-btn mt-9 py-1 bg-gradient-to-r from-green-400 to-blue-500  hover:text-red-75 text-2xl text-center rounded'>
+            <div className='mint-btn mt-9.5 py-0.8 bg-gradient-to-r from-green-400 to-blue-500  hover:text-red-75 text-2xl text-center rounded'>
               <button onClick={mint}>Mint</button>
             </div>
           </div>

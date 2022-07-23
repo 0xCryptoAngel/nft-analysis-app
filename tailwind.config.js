@@ -6,6 +6,10 @@ module.exports = {
       fontFamily: {
         Permanent: ["Permanent Marker"],    
       },
+      spacing: {
+        '0.8': '0.3rem',
+        '9.5': '2.3rem',
+      },
       width: {
         100: '28rem',
         110: '35rem',

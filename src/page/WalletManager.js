@@ -20,15 +20,13 @@ const WalletManager = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [collection, setCollection] = React.useState([]);
   const [modalShow, setModalShow] = useState(false)
-  const [address, setAddress] = useState('adfasdfasdfads')
-  const [privateKey, setPrivateKey] = useState('123123123')
   const [selectedAmount, setSelectedAmount] = useState(0)
-  const [walletInfo, setWalletInfo] = useState([])
   const [walletData, setWalletData] = useState([])
   const [manager, setManager] = useState([])
   const web3 = new Web3(`https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`)
   useEffect(()=> {
-    setCollection(cloneDeep(manager.slice(0, 10)));
+    let result = localStorage.getItem('walletData')
+    setCollection(cloneDeep(JSON.parse(result)?.slice(0, 10)));
   }, [manager])
 
   const createWallet = (index) => {
@@ -47,10 +45,24 @@ const WalletManager = () => {
     setWalletData(data);
   }
   const saveWallets = () => {
-    
+    localStorage.setItem('walletData', JSON.stringify(walletData));
     setManager(walletData)
   }
   const walletAmount = [1, 2, 3, 5, 10, 20, 50, 100]
+  const updatePage = p => {
+    setCurrentPage(p);
+    const to = countPerPage * p;
+    const from = to - countPerPage;
+    setCollection(cloneDeep(manager.slice(from, to)));
+  };
+
+  const deleteItem = (index) => {
+    console.log("index", index)
+    let wallet = localStorage.getItem('walletData')
+    const result = JSON.parse(wallet)?.filter(item => item.index !== index)
+    localStorage.setItem('walletData', JSON.stringify(result));
+    setManager(result)
+  }
   const GenerateWallet = ({ show, onHide }) => {
     return (
       <Modal show={show} handleClose={onHide}>
@@ -91,18 +103,6 @@ const WalletManager = () => {
       </Modal>
     )
   }
-  const updatePage = p => {
-    setCurrentPage(p);
-    const to = countPerPage * p;
-    const from = to - countPerPage;
-    setCollection(cloneDeep(manager.slice(from, to)));
-  };
-
-  const deleteItem = (index) => {
-    console.log("index", index)
-    const result = manager.filter(item => item.index !== index)
-    setManager(result)
-  }
   return (
     <div className="text-white pt-8">
       <div className="flex justify-between items-center px-8">
@@ -116,7 +116,7 @@ const WalletManager = () => {
             <tr className="pointer-events-none">
               <th className="py-3">Wallet Name</th>
               <th>Tag</th>
-              <th>Total Balance</th>
+              <th>Total NFT</th>
               <th>ETH</th>
               <th>Action</th>
             </tr>
@@ -127,7 +127,7 @@ const WalletManager = () => {
                 <td>Wallet Name{item.index + 1}</td>
                 <td>{formatData(item.address)}</td>
                 <td>0</td>
-                <td>&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;</td>
+                <td>0</td>
                 <td className="py-2">
                   <div className="flex flex-col items-center">
                     <button className="rounded-full bg-white hover:bg-blue-820 hover:text-white w-6 h-6 flex justify-center items-center" onClick={()=>deleteItem(item.index)}>
