@@ -7,16 +7,9 @@ import "rc-pagination/assets/index.css";
 import cloneDeep from "lodash/cloneDeep";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  saveWallet,
-  selectCount
-} from './walletSlice';
-import { result } from "lodash";
 
 const WalletManager = () => {
-  const dispatch = useDispatch();
-  const count = useSelector(selectCount);
+
   const countPerPage = 10;
   const [currentPage, setCurrentPage] = React.useState(1);
   const [collection, setCollection] = React.useState([]);
@@ -60,7 +53,6 @@ const WalletManager = () => {
   };
 
   const deleteItem = (index) => {
-    console.log("index", index)
     let wallet = localStorage.getItem('walletData')
     const result = JSON.parse(wallet)?.filter(item => item.index !== index)
     localStorage.setItem('walletData', JSON.stringify(result));
@@ -89,14 +81,12 @@ const WalletManager = () => {
             </div> 
           ))}
         </div>
-        <div>{count[0]}</div>
         <div className="flex justify-center">
           <div
             className="bg-gradient-to-r from-green-400 to-blue-500 rounded py-2 px-4"
             onClick={()=> {
                 saveWallets(); 
                 setModalShow(false);
-                dispatch(saveWallet(['hello']));
               }
             }
           > 

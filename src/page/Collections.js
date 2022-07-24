@@ -11,7 +11,6 @@ const Collections =  () => {
   }, [])
   const fetchCollection = async () => {
     const openSeaData = await axios.get('https://nameless-garden-35810.herokuapp.com/collections')
-    console.log("openSeaData.data.collections", openSeaData.data.result)
     setLoad(false)
     setCollection(openSeaData.data.result)
   }

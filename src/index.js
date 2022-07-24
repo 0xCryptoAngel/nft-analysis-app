@@ -14,24 +14,21 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import store from './store/store'
-import { Provider } from 'react-redux'
+
 
 ReactDOM.render(
   <React.StrictMode>
     <Web3ReactProvider getLibrary={getLibrary}>
-      <Provider store={store}>
-        <MetamaskProvider>
-          <BrowserRouter>
-            <Navbar/>
-            <Routes>
-              <Route path="/" element={<Mint />} />
-              <Route path="/wallet-manager" element={<WalletManager/>} />
-              <Route path="/collections" element={<Collections/>} />
-            </Routes>
-          </BrowserRouter>
-        </MetamaskProvider>
-      </Provider>
+      <MetamaskProvider>
+        <BrowserRouter>
+          <Navbar/>
+          <Routes>
+            <Route path="/" element={<Mint />} />
+            <Route path="/wallet-manager" element={<WalletManager/>} />
+            <Route path="/collections" element={<Collections/>} />
+          </Routes>
+        </BrowserRouter>
+      </MetamaskProvider>
     </Web3ReactProvider>
   </React.StrictMode>,
   document.getElementById('root')
