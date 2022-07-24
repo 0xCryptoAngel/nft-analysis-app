@@ -31,18 +31,15 @@ const Navbar = () => {
           <Link to="/">
             <li className={"border-b-4  hover:border-blue-460  py-6 " + (location.pathname === '/' ? 'border-blue-460' : 'border-blue-840')}>Mint Bot</li>
           </Link>
+          <Link to="/#">
+            <li className="border-b-4 border-blue-840 hover:border-blue-460  py-6">Auto trading</li>
+          </Link>
           <Link to="/wallet-manager">
             <li className={"border-b-4  hover:border-blue-460  py-6 " + (location.pathname === '/wallet-manager' ? 'border-blue-460' : 'border-blue-840')}>Wallet Manager</li>
           </Link>
         </ul>
       </div>
       <div className="flex items-center space-x-4"> 
-        <div className="flex">
-          <div className="text-blue-460 relative z-10 flex items-center">
-            <FontAwesomeIcon icon={faSearch}  className="w-5 h-5"/>
-          </div>
-          <input type="text" placeholder="Search Collection" className="-ml-8 bg-blue-830 border border-gray-500 rounded py-2 pl-10 pr-24"/>
-        </div>
         <div className="text-blue-460  flex items-center">
           <FontAwesomeIcon icon={faGasPump}  className="w-5 h-5"/>
           <div className="text-white pl-2">{gas > 0 ? Number(gas).toFixed(2) : 0 }</div>
