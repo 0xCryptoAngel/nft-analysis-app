@@ -150,8 +150,8 @@ const Mint = () => {
               <input className="p-2 bg-blue-820 rounded"  type="number" placeholder='250' value={gas} onChange={handleGas}/>
             </div>
             <div className='flex flex-col my-2'>
-              <label className="text-lg">Schedule</label>
-              <input className="p-2 bg-gradient-to-r from-green-400 to-blue-500 rounded"  type="datetime-local" value={date} onChange={handleDate}/>
+              <label className="text-lg" id="meeting-time">Schedule</label>
+              <input className="p-2 bg-gradient-to-r from-green-400 to-blue-500 rounded"  id="meeting-time" type="datetime-local" value={date} onChange={handleDate}/>
             </div>
           </div>
 

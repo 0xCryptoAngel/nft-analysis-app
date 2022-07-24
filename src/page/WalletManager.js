@@ -12,6 +12,7 @@ import {
   saveWallet,
   selectCount
 } from './walletSlice';
+import { result } from "lodash";
 
 const WalletManager = () => {
   const dispatch = useDispatch();
@@ -33,16 +34,18 @@ const WalletManager = () => {
     setSelectedAmount(index)
     const account_info = web3.eth.accounts.wallet.create(index);
     const data = Object.values(account_info)?.slice(0, index);
-    const updatedData = data.map( async (item)=>{
-      let balance =  await web3.eth.getBalance(item.address)
-      return {
-        ...item,
-        balance: balance,
-      }
+    let updatedData = []
+    data.forEach((item)=>{
+      web3.eth.getBalance(item.address).then((res)=>{
+        updatedData.push(
+          {
+            ...item,
+            balance: res,
+          }
+        )
+        setWalletData([...updatedData]); 
+      })
     })
-    console.log("data", updatedData)
-    // 
-    setWalletData(data);
   }
   const saveWallets = () => {
     localStorage.setItem('walletData', JSON.stringify(walletData));
@@ -127,7 +130,7 @@ const WalletManager = () => {
                 <td>Wallet Name{item.index + 1}</td>
                 <td>{formatData(item.address)}</td>
                 <td>0</td>
-                <td>0</td>
+                <td>{item.balance}</td>
                 <td className="py-2">
                   <div className="flex flex-col items-center">
                     <button className="rounded-full bg-white hover:bg-blue-820 hover:text-white w-6 h-6 flex justify-center items-center" onClick={()=>deleteItem(item.index)}>
