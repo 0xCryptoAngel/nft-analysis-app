@@ -4,9 +4,7 @@ import website from "../assets/website.svg"
 import discord from "../assets/discord.svg"
 import twitter from "../assets/twitter.svg"
 import opensea from "../assets/opensea.svg"
-import formatData from "../utils/formatAddress";
 import formatPeriod from "../utils/formatPeriod";
-import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { faArrowTrendDown, faArrowTrendUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from 'axios';
