@@ -4,13 +4,10 @@ import "react-tabs/style/react-tabs.css";
 import axios from 'axios';
 import {
   ResponsiveContainer,
-  ComposedChart,
-  LineChart,
   BarChart,
   ScatterChart, 
   AreaChart,
   Area,
-  Line,
   Bar,
   XAxis,
   YAxis,
@@ -31,62 +28,59 @@ const Analysis = () => {
   }, [])
   const fetchCollection = async () => {
     const openSeaData = await axios.get("https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=boredapeyachtclub&type=floor_price")
-    console.log("openSeaData.data", openSeaData.data)
     setCollection(openSeaData.data)
   }
   const fetchStrength = async ()=> {
     const strengthData = await axios.get("https://api.nftinit.io/api/get_price_distribution/?c=2")
-    console.log("openSeaData.data", strengthData.data.items)
     setStrength(strengthData.data.items)
   }
   const fetchListing = async () => {
     const listingData = await axios.get("https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=boredapeyachtclub&type=listed_count")
-    console.log("openSeaData.data", listingData.data)
     setListing(listingData.data)
   }
   const fetchOwner = async () => {
     const nftData = await axios.get("https://api.nftinit.io/api/get_nfts_per_owner/?c=2")
-    console.log("openSeaData.data", nftData.data.items)
     setNftOwner(nftData.data.items)
   }
   const fetchSales = async () => {
     const sales = await axios.get("https://api.nftinit.io/api/sale_chart/?slug=boredapeyachtclub&tc=true&tn=true")
-    console.log("openSeaData.data", sales.data.items)
     let filter = sales.data.items?.filter(item => item.event_price < 600)
     setSalesData(filter)
   }
   
   return (
-    <div>
-      <div>
-        <Tabs>
-          <TabList>
-            <Tab>Floor Price</Tab>
-            <Tab onClick={fetchStrength}>Floor Strength</Tab>
-            <Tab onClick={fetchListing}>Active Listings</Tab>
-            <Tab onClick={fetchOwner}>Nfts Per Owner</Tab>
-            <Tab onClick={fetchSales}>Sales / Ranking</Tab>
-          </TabList>
-          <TabPanel>
-              <AreaChart
-                width={1400}
-                height={800}
-                data={collection}
-                margin={{
-                  top: 10,
-                  right: 30,
-                  left: 0,
-                  bottom: 0,
-                }}
-              >
-                <CartesianGrid strokeDasharray="4 4" vertical={false}/>
-                <XAxis dataKey="timestamp" />
-                <YAxis />
-                <Tooltip />
-                <Area type="linear" dataKey="floor_price" stroke="#8884d8" fill="#8884d8" />
-              </AreaChart>
-          </TabPanel>
-          <TabPanel>
+    <div className="p-8">
+      <Tabs>
+        <TabList>
+          <Tab>Floor Price</Tab>
+          <Tab onClick={fetchStrength}>Floor Strength</Tab>
+          <Tab onClick={fetchListing}>Active Listings</Tab>
+          <Tab onClick={fetchOwner}>Nfts Per Owner</Tab>
+          <Tab onClick={fetchSales}>Sales / Ranking</Tab>
+        </TabList>
+        <TabPanel>
+          <ResponsiveContainer width="100%" height={800}>
+            <AreaChart
+              width={1400}
+              height={800}
+              data={collection}
+              margin={{
+                top: 10,
+                right: 30,
+                left: 0,
+                bottom: 0,
+              }}
+            >
+              <CartesianGrid strokeDasharray="4 4" vertical={false}/>
+              <XAxis dataKey="timestamp" />
+              <YAxis />
+              <Tooltip />
+              <Area type="linear" dataKey="floor_price" stroke="#8884d8" fill="#8884d8" />
+            </AreaChart>
+          </ResponsiveContainer>
+        </TabPanel>
+        <TabPanel>
+          <ResponsiveContainer width="100%" height={800}>
             <BarChart
               width={1400}
               height={800}
@@ -105,8 +99,10 @@ const Analysis = () => {
               <Legend />
               <Bar dataKey="count" fill="#8884d8" />
             </BarChart>
-          </TabPanel>
-          <TabPanel>
+          </ResponsiveContainer>
+        </TabPanel>
+        <TabPanel>
+          <ResponsiveContainer width="100%" height={800}>
             <AreaChart
               width={1400}
               height={800}
@@ -124,8 +120,10 @@ const Analysis = () => {
               <Tooltip />
               <Area type="linear" dataKey="listed_count" stroke="#8884d8" fill="#8884d8" />
             </AreaChart>
-          </TabPanel>
-          <TabPanel>
+          </ResponsiveContainer>
+        </TabPanel>
+        <TabPanel>
+          <ResponsiveContainer width="100%" height={800}>
             <BarChart
               width={1400}
               height={800}
@@ -144,8 +142,10 @@ const Analysis = () => {
               <Legend />
               <Bar dataKey="percantage" fill="#8884d8" />
             </BarChart>
-          </TabPanel>
-          <TabPanel>
+          </ResponsiveContainer>
+        </TabPanel>
+        <TabPanel>
+          <ResponsiveContainer width="100%" height={800}>
             <ScatterChart
               width={1400}
               height={800}
@@ -162,9 +162,9 @@ const Analysis = () => {
               <Tooltip cursor={{ strokeDasharray: '3 3' }} />
               <Scatter name="A school" data={salesData} fill="#8884d8" />
             </ScatterChart>
-          </TabPanel>
-        </Tabs>
-      </div>
+          </ResponsiveContainer>
+        </TabPanel>
+      </Tabs>
     </div>
   );
 };
