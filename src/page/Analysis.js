@@ -52,7 +52,7 @@ const Analysis = () => {
   const fetchSales = async () => {
     const sales = await axios.get("https://api.nftinit.io/api/sale_chart/?slug=boredapeyachtclub&tc=true&tn=true")
     console.log("openSeaData.data", sales.data.items)
-    let filter = sales.data.items?.filter(item => item.event_price < 10000)
+    let filter = sales.data.items?.filter(item => item.event_price < 600)
     setSalesData(filter)
   }
   
@@ -69,7 +69,7 @@ const Analysis = () => {
           </TabList>
           <TabPanel>
               <AreaChart
-                width={1000}
+                width={1400}
                 height={800}
                 data={collection}
                 margin={{
@@ -79,7 +79,7 @@ const Analysis = () => {
                   bottom: 0,
                 }}
               >
-                <CartesianGrid strokeDasharray="3 3" vertical={false}/>
+                <CartesianGrid strokeDasharray="4 4" vertical={false}/>
                 <XAxis dataKey="timestamp" />
                 <YAxis />
                 <Tooltip />
@@ -88,7 +88,7 @@ const Analysis = () => {
           </TabPanel>
           <TabPanel>
             <BarChart
-              width={1000}
+              width={1400}
               height={800}
               data={strength}
               margin={{
@@ -98,7 +98,7 @@ const Analysis = () => {
                 bottom: 5
               }}
             >
-              <CartesianGrid strokeDasharray="3 3" />
+              <CartesianGrid strokeDasharray="4 4" vertical={false}/>
               <XAxis dataKey="price_range" />
               <YAxis />
               <Tooltip />
@@ -108,7 +108,7 @@ const Analysis = () => {
           </TabPanel>
           <TabPanel>
             <AreaChart
-              width={1000}
+              width={1400}
               height={800}
               data={listing}
               margin={{
@@ -127,7 +127,7 @@ const Analysis = () => {
           </TabPanel>
           <TabPanel>
             <BarChart
-              width={1000}
+              width={1400}
               height={800}
               data={nftOwner}
               margin={{
@@ -137,7 +137,7 @@ const Analysis = () => {
                 bottom: 5
               }}
             >
-              <CartesianGrid strokeDasharray="3 3" />
+              <CartesianGrid strokeDasharray="4 4" vertical={false}/>
               <XAxis dataKey="nft" />
               <YAxis />
               <Tooltip />
@@ -147,7 +147,7 @@ const Analysis = () => {
           </TabPanel>
           <TabPanel>
             <ScatterChart
-              width={1000}
+              width={1400}
               height={800}
               margin={{
                 top: 20,
@@ -156,7 +156,7 @@ const Analysis = () => {
                 left: 20,
               }}
             >
-              <CartesianGrid />
+              <CartesianGrid strokeDasharray="4 4" vertical={false}/>
               <XAxis dataKey="event_date" name="stature" unit="cm" />
               <YAxis dataKey="event_price" name="weight" unit="kg" />
               <Tooltip cursor={{ strokeDasharray: '3 3' }} />
