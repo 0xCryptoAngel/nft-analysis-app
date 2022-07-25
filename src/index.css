@@ -63,3 +63,6 @@ tr:hover {
   background-image: linear-gradient(90deg, #34d399, #3b82f6) !important;
   border-radius: 5px !important;
 }
+.react-tabs__tab:focus:after {
+  background: none !important;
+}
