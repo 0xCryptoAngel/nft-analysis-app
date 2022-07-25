@@ -52,4 +52,14 @@ tr:nth-child(even) {
 tr:hover {
   background-color: #353554;
 }
-
+.react-tabs__tab-list {
+  border: none !important;
+}
+.react-tabs__tab {
+  border: none !important;
+  color: white !important
+}
+.react-tabs__tab--selected {
+  background-image: linear-gradient(90deg, #34d399, #3b82f6) !important;
+  border-radius: 5px !important;
+}
