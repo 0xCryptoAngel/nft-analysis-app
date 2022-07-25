@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import priceChart from '../utils/priceChart';
 import "react-tabs/style/react-tabs.css";
 import axios from 'axios';
 import {
@@ -27,6 +28,7 @@ const Analysis = () => {
     fetchCollection()
   }, [])
   const fetchCollection = async () => {
+   
     const openSeaData = await axios.get("https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=boredapeyachtclub&type=floor_price")
     setCollection(openSeaData.data)
   }
@@ -46,6 +48,16 @@ const Analysis = () => {
     const sales = await axios.get("https://api.nftinit.io/api/sale_chart/?slug=boredapeyachtclub&tc=true&tn=true")
     let filter = sales.data.items?.filter(item => item.event_price < 600)
     setSalesData(filter)
+  }
+  const CustomizedAxisTick = (props) => {
+    const { x, y, stroke, payload } = props;
+    return (
+      <g transform={`translate(${x},${y})`}>
+        <text x={0} y={0} dy={16} textAnchor="end" fill="#666">
+          {payload.value && priceChart(payload.value)}
+        </text>
+      </g>
+    );
   }
   
   return (
@@ -72,7 +84,7 @@ const Analysis = () => {
               }}
             >
               <CartesianGrid strokeDasharray="4 4" vertical={false}/>
-              <XAxis dataKey="timestamp" ticks={['Page A', 'Page C', 'Page G']}/>
+              <XAxis dataKey="timestamp" interval={1000} tick={<CustomizedAxisTick />}/>
               <YAxis />
               <Tooltip />
               <Area type="linear" dataKey="floor_price" stroke="#8884d8" fill="#8884d8" />
