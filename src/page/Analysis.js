@@ -72,7 +72,7 @@ const Analysis = () => {
               }}
             >
               <CartesianGrid strokeDasharray="4 4" vertical={false}/>
-              <XAxis dataKey="timestamp" />
+              <XAxis dataKey="timestamp" ticks={['Page A', 'Page C', 'Page G']}/>
               <YAxis />
               <Tooltip />
               <Area type="linear" dataKey="floor_price" stroke="#8884d8" fill="#8884d8" />
