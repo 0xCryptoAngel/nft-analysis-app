@@ -87,7 +87,7 @@ const Analysis = () => {
               <XAxis dataKey="timestamp" interval={1000} tick={<CustomizedAxisTick />}/>
               <YAxis />
               <Tooltip />
-              <Area type="linear" dataKey="floor_price" stroke="#8884d8" fill="#8884d8" />
+              <Area type="monotone" dataKey="floor_price" stroke="#8884d8" fill="#8884d8" />
             </AreaChart>
           </ResponsiveContainer>
         </TabPanel>
@@ -108,7 +108,6 @@ const Analysis = () => {
               <XAxis dataKey="price_range" />
               <YAxis />
               <Tooltip />
-              <Legend />
               <Bar dataKey="count" fill="#8884d8" />
             </BarChart>
           </ResponsiveContainer>
@@ -126,11 +125,11 @@ const Analysis = () => {
                 bottom: 0,
               }}
             >
-              <CartesianGrid strokeDasharray="3 3" vertical={false}/>
-              <XAxis dataKey="timestamp" />
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="timestamp" interval={1000} tick={<CustomizedAxisTick />}/>
               <YAxis />
               <Tooltip />
-              <Area type="linear" dataKey="listed_count" stroke="#8884d8" fill="#8884d8" />
+              <Area type="monotone" dataKey="listed_count" stroke="#8884d8" fill="#8884d8" />
             </AreaChart>
           </ResponsiveContainer>
         </TabPanel>
@@ -151,8 +150,7 @@ const Analysis = () => {
               <XAxis dataKey="nft" />
               <YAxis />
               <Tooltip />
-              <Legend />
-              <Bar dataKey="percantage" fill="#8884d8" />
+              <Bar dataKey="holder" fill="#8884d8" />
             </BarChart>
           </ResponsiveContainer>
         </TabPanel>
@@ -169,8 +167,8 @@ const Analysis = () => {
               }}
             >
               <CartesianGrid strokeDasharray="4 4" vertical={false}/>
-              <XAxis dataKey="event_date" name="stature" unit="cm" />
-              <YAxis dataKey="event_price" name="weight" unit="kg" />
+              <XAxis dataKey="event_date" interval={200} tick={<CustomizedAxisTick />}/>
+              <YAxis dataKey="event_price" />
               <Tooltip cursor={{ strokeDasharray: '3 3' }} />
               <Scatter name="A school" data={salesData} fill="#8884d8" />
             </ScatterChart>
