@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import priceChart from '../utils/priceChart';
+import randomColor from '../utils/randomColor';
 import "react-tabs/style/react-tabs.css";
 import axios from 'axios';
 import {
@@ -14,7 +15,7 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
+  Cell,
   Scatter
 } from "recharts";
 
@@ -24,8 +25,13 @@ const Analysis = () => {
   const [listing, setListing] = useState([])
   const [nftOwner, setNftOwner] = useState([])
   const [salesData, setSalesData] = useState([])
+
   useEffect(()=> {
     fetchCollection()
+    fetchStrength()
+    fetchListing()
+    fetchOwner()
+    fetchSales()
   }, [])
   const fetchCollection = async () => {
    
@@ -46,7 +52,7 @@ const Analysis = () => {
   }
   const fetchSales = async () => {
     const sales = await axios.get("https://api.nftinit.io/api/sale_chart/?slug=boredapeyachtclub&tc=true&tn=true")
-    let filter = sales.data.items?.filter(item => item.event_price < 600)
+    let filter = sales.data.items?.filter(item => item.event_price < 300)
     setSalesData(filter)
   }
   const CustomizedAxisTick = (props) => {
@@ -61,39 +67,15 @@ const Analysis = () => {
   }
   
   return (
-    <div className="p-8">
-      <Tabs>
-        <TabList>
-          <Tab>Floor Price</Tab>
-          <Tab onClick={fetchStrength}>Floor Strength</Tab>
-          <Tab onClick={fetchListing}>Active Listings</Tab>
-          <Tab onClick={fetchOwner}>Nfts Per Owner</Tab>
-          <Tab onClick={fetchSales}>Sales / Ranking</Tab>
-        </TabList>
-        <TabPanel>
-          <ResponsiveContainer width="100%" height={800}>
-            <AreaChart
-              width={1400}
-              height={800}
-              data={collection}
-              margin={{
-                top: 10,
-                right: 30,
-                left: 0,
-                bottom: 0,
-              }}
-            >
-              <CartesianGrid strokeDasharray="4 4" vertical={false}/>
-              <XAxis dataKey="timestamp" interval={1000} tick={<CustomizedAxisTick />}/>
-              <YAxis />
-              <Tooltip />
-              <Area type="monotone" dataKey="floor_price" stroke="#8884d8" fill="#8884d8" />
-            </AreaChart>
-          </ResponsiveContainer>
-        </TabPanel>
-        <TabPanel>
-          <ResponsiveContainer width="100%" height={800}>
+    <div className="p-8 flex flex-col space-y-4">
+      <div className="flex justify-between">
+        <div className="w-1/2 space-y-2">
+          <div className="text-white text-xl font-bold text-center">Floor Price</div>
+          
+          <ResponsiveContainer width="100%" height={400}>
+          
             <BarChart
+              layout="vertical"
               width={1400}
               height={800}
               data={strength}
@@ -105,36 +87,16 @@ const Analysis = () => {
               }}
             >
               <CartesianGrid strokeDasharray="4 4" vertical={false}/>
-              <XAxis dataKey="price_range" />
-              <YAxis />
+              <XAxis type="number" />
+              <YAxis type="category" dataKey="price_range" interval={2}/>
               <Tooltip />
-              <Bar dataKey="count" fill="#8884d8" />
+              <Bar dataKey="count" fill="#37AEC4" />
             </BarChart>
           </ResponsiveContainer>
-        </TabPanel>
-        <TabPanel>
-          <ResponsiveContainer width="100%" height={800}>
-            <AreaChart
-              width={1400}
-              height={800}
-              data={listing}
-              margin={{
-                top: 10,
-                right: 30,
-                left: 0,
-                bottom: 0,
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis dataKey="timestamp" interval={1000} tick={<CustomizedAxisTick />}/>
-              <YAxis />
-              <Tooltip />
-              <Area type="monotone" dataKey="listed_count" stroke="#8884d8" fill="#8884d8" />
-            </AreaChart>
-          </ResponsiveContainer>
-        </TabPanel>
-        <TabPanel>
-          <ResponsiveContainer width="100%" height={800}>
+        </div>
+        <div className="w-1/2 space-y-2">
+          <div className="text-white text-xl font-bold text-center">Floor strength</div>
+          <ResponsiveContainer width="100%" height={400}>
             <BarChart
               width={1400}
               height={800}
@@ -150,31 +112,94 @@ const Analysis = () => {
               <XAxis dataKey="nft" />
               <YAxis />
               <Tooltip />
-              <Bar dataKey="holder" fill="#8884d8" />
+              <Bar dataKey="holder" fill="#37AEC4" />
             </BarChart>
           </ResponsiveContainer>
-        </TabPanel>
-        <TabPanel>
-          <ResponsiveContainer width="100%" height={800}>
-            <ScatterChart
+        </div>
+      </div>
+      <div className="flex justify-between">
+        <div className="w-1/2 space-y-2">
+          <div className="text-white text-xl font-bold text-center">Active Listings</div>
+          <ResponsiveContainer width="100%" height={400}>
+            <AreaChart
               width={1400}
               height={800}
+              data={listing}
               margin={{
-                top: 20,
-                right: 20,
-                bottom: 20,
-                left: 20,
+                top: 10,
+                right: 30,
+                left: 0,
+                bottom: 0,
               }}
             >
-              <CartesianGrid strokeDasharray="4 4" vertical={false}/>
-              <XAxis dataKey="event_date" interval={200} tick={<CustomizedAxisTick />}/>
-              <YAxis dataKey="event_price" />
-              <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-              <Scatter name="A school" data={salesData} fill="#8884d8" />
-            </ScatterChart>
+              <defs>
+                <linearGradient id="listing" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#ED434B" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="#ED434B" stopOpacity={0}/>
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="timestamp" interval={1000} tick={<CustomizedAxisTick />}/>
+              <YAxis />
+              <Tooltip />
+              <Area type="monotone" dataKey="listed_count" stroke="#ED434B" fillOpacity={1} fill="url(#listing)" />
+            </AreaChart>
           </ResponsiveContainer>
-        </TabPanel>
-      </Tabs>
+        </div>
+        <div className="w-1/2 space-y-2">
+          <div className="text-white text-xl font-bold text-center">Nfts Per Owner</div>
+          <ResponsiveContainer width="100%" height={400}>
+            <AreaChart
+                width={1400}
+                height={800}
+                data={collection}
+                margin={{
+                  top: 10,
+                  right: 30,
+                  left: 0,
+                  bottom: 0,
+                }}
+              >
+                <defs>
+                  <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#4340A7" stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor="#4340A7" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="4 4" vertical={false}/>
+                <XAxis dataKey="timestamp" interval={1000} tick={<CustomizedAxisTick />} />
+                <YAxis />
+                <Tooltip />
+                <Area type="monotone" dataKey="floor_price" stroke="#4340A7" fillOpacity={1} fill="url(#colorPv)" />
+              </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+      <div className="space-y-2">
+        <div className="text-white text-xl font-bold text-center">Sales / Ranking</div>
+        <ResponsiveContainer width="100%" height={400}>
+          <ScatterChart
+            width={1400}
+            height={800}
+            margin={{
+              top: 20,
+              right: 20,
+              bottom: 20,
+              left: 20,
+            }}
+          >
+            <CartesianGrid strokeDasharray="4 4" vertical={false}/>
+            <XAxis dataKey="event_date" interval={200} tick={<CustomizedAxisTick />}/>
+            <YAxis dataKey="event_price" />
+            <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+            <Scatter name="A school" data={salesData}>
+              {salesData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={randomColor()} />
+              ))}
+            </Scatter>
+          </ScatterChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 };
