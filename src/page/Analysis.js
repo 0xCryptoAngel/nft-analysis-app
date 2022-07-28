@@ -3,6 +3,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import priceChart from '../utils/priceChart';
 import randomColor from '../utils/randomColor';
 import "react-tabs/style/react-tabs.css";
+import { useParams  } from "react-router-dom";
 import axios from 'axios';
 import {
   ResponsiveContainer,
@@ -25,6 +26,8 @@ const Analysis = () => {
   const [listing, setListing] = useState([])
   const [nftOwner, setNftOwner] = useState([])
   const [salesData, setSalesData] = useState([])
+  const param = useParams();
+  console.log("location", param.collectionName)
 
   useEffect(()=> {
     fetchCollection()
@@ -35,7 +38,7 @@ const Analysis = () => {
   }, [])
   const fetchCollection = async () => {
    
-    const openSeaData = await axios.get("https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=boredapeyachtclub&type=floor_price")
+    const openSeaData = await axios.get(`https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=${param.collectionName}&type=floor_price`)
     setCollection(openSeaData.data)
   }
   const fetchStrength = async ()=> {
@@ -43,7 +46,7 @@ const Analysis = () => {
     setStrength(strengthData.data.items)
   }
   const fetchListing = async () => {
-    const listingData = await axios.get("https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=boredapeyachtclub&type=listed_count")
+    const listingData = await axios.get(`https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=${param.collectionName}&type=listed_count`)
     setListing(listingData.data)
   }
   const fetchOwner = async () => {
@@ -51,9 +54,11 @@ const Analysis = () => {
     setNftOwner(nftData.data.items)
   }
   const fetchSales = async () => {
-    const sales = await axios.get("https://api.nftinit.io/api/sale_chart/?slug=boredapeyachtclub&tc=true&tn=true")
-    let filter = sales.data.items?.filter(item => item.event_price < 300)
-    setSalesData(filter)
+    const sales = await axios.get(`https://api.nftinit.io/api/sale_chart/?slug=${param.collectionName}&tc=true&tn=true`)
+    let referenceDate = new Date();
+    referenceDate.setMonth(referenceDate.getMonth() - 1);
+    let filter = sales.data.items?.filter(item => item.event_price < 300 && new Date(referenceDate) < new Date(item.event_date))
+    setSalesData(filter.reverse())
   }
   const CustomizedAxisTick = (props) => {
     const { x, y, stroke, payload } = props;
@@ -70,10 +75,8 @@ const Analysis = () => {
     <div className="p-8 flex flex-col space-y-4">
       <div className="flex justify-between">
         <div className="w-1/2 space-y-2">
-          <div className="text-white text-xl font-bold text-center">Floor Price</div>
-          
+          <div className="text-white text-xl font-bold text-center">Floor strength</div>
           <ResponsiveContainer width="100%" height={400}>
-          
             <BarChart
               layout="vertical"
               width={1400}
@@ -95,7 +98,7 @@ const Analysis = () => {
           </ResponsiveContainer>
         </div>
         <div className="w-1/2 space-y-2">
-          <div className="text-white text-xl font-bold text-center">Floor strength</div>
+          <div className="text-white text-xl font-bold text-center">Nfts Per Owner</div>
           <ResponsiveContainer width="100%" height={400}>
             <BarChart
               width={1400}
@@ -147,7 +150,7 @@ const Analysis = () => {
           </ResponsiveContainer>
         </div>
         <div className="w-1/2 space-y-2">
-          <div className="text-white text-xl font-bold text-center">Nfts Per Owner</div>
+          <div className="text-white text-xl font-bold text-center">Floor Price</div>
           <ResponsiveContainer width="100%" height={400}>
             <AreaChart
                 width={1400}
@@ -189,7 +192,7 @@ const Analysis = () => {
             }}
           >
             <CartesianGrid strokeDasharray="4 4" vertical={false}/>
-            <XAxis dataKey="event_date" interval={200} tick={<CustomizedAxisTick />}/>
+            <XAxis dataKey="event_date" interval={800} tick={<CustomizedAxisTick />}/>
             <YAxis dataKey="event_price" />
             <Tooltip cursor={{ strokeDasharray: '3 3' }} />
             <Scatter name="A school" data={salesData}>

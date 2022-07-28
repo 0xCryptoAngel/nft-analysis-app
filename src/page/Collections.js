@@ -8,6 +8,7 @@ import formatPeriod from "../utils/formatPeriod";
 import { faArrowTrendDown, faArrowTrendUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from 'axios';
+import { Link, useLocation  } from "react-router-dom";
 
 const Collections =  () => {
   const [collection, setCollection] = useState([])
@@ -60,7 +61,7 @@ const Collections =  () => {
               <tbody>{collection.map((item, i) => 
                 <tr key={i}>
                   <td className="py-2">
-                    <div className="flex items-center space-x-8">
+                    <Link to={`/analysis/${item.slug}`} className="flex items-center space-x-8">
                       <img src={item.image} alt="img" className="w-10 h-10 rounded"/>
                       <div className="flex items-center">
                         <div>
@@ -68,7 +69,7 @@ const Collections =  () => {
                           <div>{item.assets} assets</div>
                         </div>
                       </div>
-                    </div>
+                    </Link>
                   </td>
                   <td>
                     <div className="space-y-1">
@@ -128,13 +129,14 @@ const Collections =  () => {
                   {/* <td>
                     {item && 
                       <div className="flex space-x-4">
-                        <div className="bg-green-700 px-2 py-1">{Math.floor(item.one_day_volume)}</div>
-                        <div className="bg-green-700 px-2 py-1">{Math.floor(item.seven_day_volume)}</div>
-                        <div className="bg-green-700 px-2 py-1">{Math.floor(item.thirty_day_volume)}</div>
+                      <div className="bg-green-700 px-2 py-1">{Math.floor(item.one_day_volume)}</div>
+                      <div className="bg-green-700 px-2 py-1">{Math.floor(item.seven_day_volume)}</div>
+                      <div className="bg-green-700 px-2 py-1">{Math.floor(item.thirty_day_volume)}</div>
                       </div>
                     }
                   </td> */}
-                </tr>)}
+                </tr>
+                )}
               </tbody>
             }
           </table>
