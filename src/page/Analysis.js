@@ -41,7 +41,7 @@ const Analysis = () => {
   const fetchCollection = async () => {
    
     const openSeaData = await axios.get(`https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=${param.collectionName}&type=floor_price`)
-    setCollection(openSeaData.data)
+    setCollection(areaChartFilter(openSeaData.data))
   }
   const fetchStrength = async ()=> {
     const strengthData = await axios.get(`https://api.nftinit.io/api/get_price_distribution/?c=${param.id}`)
