@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import priceChart from '../utils/priceChart';
+import salesChart from '../utils/salesChart';
 import areaChartFilter from '../utils/areaChartFilter';
 import randomColor from '../utils/randomColor';
 import "react-tabs/style/react-tabs.css";
@@ -56,10 +57,8 @@ const Analysis = () => {
   }
   const fetchSales = async () => {
     const sales = await axios.get(`https://api.nftinit.io/api/sale_chart/?slug=${param.collectionName}&tc=true&tn=true`)
-    let referenceDate = new Date();
-    referenceDate.setMonth(referenceDate.getMonth() - 1);
-    let filter = sales.data.items?.filter(item => item.event_price < 300 && new Date(referenceDate) < new Date(item.event_date))
-    setSalesData(filter.reverse())
+    let data = salesChart(sales)
+    setSalesData(data)
   }
   const CustomizedAxisTick = (props) => {
     const { x, y, stroke, payload } = props;
@@ -94,7 +93,6 @@ const Analysis = () => {
                 bottom: 5
               }}
             >
-              <CartesianGrid strokeDasharray="4 4" vertical={false}/>
               <XAxis type="number" />
               <YAxis type="category" dataKey="price_range" interval={Math.floor(strength.length/10)}/>
               <Tooltip />
@@ -116,7 +114,6 @@ const Analysis = () => {
                 bottom: 5
               }}
             >
-              <CartesianGrid strokeDasharray="4 4" vertical={false}/>
               <XAxis dataKey="nft" interval={Math.floor(nftOwner.length/10)} />
               <YAxis />
               <Tooltip wrapperStyle={divStyle}/>
@@ -146,7 +143,6 @@ const Analysis = () => {
                   <stop offset="95%" stopColor="#ED434B" stopOpacity={0}/>
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <XAxis dataKey="timestamp" interval={Math.floor(listing.length/10)} tick={<CustomizedAxisTick />}/>
               <YAxis />
               <Tooltip />
@@ -174,7 +170,6 @@ const Analysis = () => {
                     <stop offset="95%" stopColor="#4340A7" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="4 4" vertical={false}/>
                 <XAxis dataKey="timestamp" interval={Math.floor(collection.length/10)} tick={<CustomizedAxisTick />} />
                 <YAxis />
                 <Tooltip />
@@ -196,7 +191,6 @@ const Analysis = () => {
               left: 20,
             }}
           >
-            <CartesianGrid strokeDasharray="4 4" vertical={false}/>
             <XAxis dataKey="event_date" interval={Math.floor(salesData.length/10)} tick={<CustomizedAxisTick />}/>
             <YAxis dataKey="event_price" />
             <Tooltip cursor={{ strokeDasharray: '3 3' }} />
