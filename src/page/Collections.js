@@ -61,7 +61,7 @@ const Collections =  () => {
               <tbody>{collection.map((item, i) => 
                 <tr key={i}>
                   <td className="py-2">
-                    <Link to={`/analysis/${item.slug}`} className="flex items-center space-x-8">
+                    <Link to={`/analysis/${item.slug}/${item.id}`} className="flex items-center space-x-8">
                       <img src={item.image} alt="img" className="w-10 h-10 rounded"/>
                       <div className="flex items-center">
                         <div>

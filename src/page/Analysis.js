@@ -3,7 +3,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import priceChart from '../utils/priceChart';
 import randomColor from '../utils/randomColor';
 import "react-tabs/style/react-tabs.css";
-import { useParams  } from "react-router-dom";
+import { useParams, useLocation  } from "react-router-dom";
 import axios from 'axios';
 import {
   ResponsiveContainer,
@@ -42,7 +42,7 @@ const Analysis = () => {
     setCollection(openSeaData.data)
   }
   const fetchStrength = async ()=> {
-    const strengthData = await axios.get("https://api.nftinit.io/api/get_price_distribution/?c=2")
+    const strengthData = await axios.get(`https://api.nftinit.io/api/get_price_distribution/?c=${param.id}`)
     setStrength(strengthData.data.items)
   }
   const fetchListing = async () => {
@@ -50,7 +50,7 @@ const Analysis = () => {
     setListing(listingData.data)
   }
   const fetchOwner = async () => {
-    const nftData = await axios.get("https://api.nftinit.io/api/get_nfts_per_owner/?c=2")
+    const nftData = await axios.get(`https://api.nftinit.io/api/get_nfts_per_owner/?c=${param.id}`)
     setNftOwner(nftData.data.items)
   }
   const fetchSales = async () => {
@@ -91,7 +91,7 @@ const Analysis = () => {
             >
               <CartesianGrid strokeDasharray="4 4" vertical={false}/>
               <XAxis type="number" />
-              <YAxis type="category" dataKey="price_range" interval={2}/>
+              <YAxis type="category" dataKey="price_range" interval={Math.floor(strength.length/10)}/>
               <Tooltip />
               <Bar dataKey="count" fill="#37AEC4" />
             </BarChart>
@@ -112,7 +112,7 @@ const Analysis = () => {
               }}
             >
               <CartesianGrid strokeDasharray="4 4" vertical={false}/>
-              <XAxis dataKey="nft" />
+              <XAxis dataKey="nft" interval={Math.floor(strength.length/10)} />
               <YAxis />
               <Tooltip />
               <Bar dataKey="holder" fill="#37AEC4" />
@@ -142,7 +142,7 @@ const Analysis = () => {
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis dataKey="timestamp" interval={1000} tick={<CustomizedAxisTick />}/>
+              <XAxis dataKey="timestamp" interval={Math.floor(strength.length/2)} tick={<CustomizedAxisTick />}/>
               <YAxis />
               <Tooltip />
               <Area type="monotone" dataKey="listed_count" stroke="#ED434B" fillOpacity={1} fill="url(#listing)" />
@@ -170,7 +170,7 @@ const Analysis = () => {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="4 4" vertical={false}/>
-                <XAxis dataKey="timestamp" interval={1000} tick={<CustomizedAxisTick />} />
+                <XAxis dataKey="timestamp" interval={Math.floor(strength.length/2)} tick={<CustomizedAxisTick />} />
                 <YAxis />
                 <Tooltip />
                 <Area type="monotone" dataKey="floor_price" stroke="#4340A7" fillOpacity={1} fill="url(#colorPv)" />
@@ -192,7 +192,7 @@ const Analysis = () => {
             }}
           >
             <CartesianGrid strokeDasharray="4 4" vertical={false}/>
-            <XAxis dataKey="event_date" interval={800} tick={<CustomizedAxisTick />}/>
+            <XAxis dataKey="event_date" interval={Math.floor(strength.length/2)} tick={<CustomizedAxisTick />}/>
             <YAxis dataKey="event_price" />
             <Tooltip cursor={{ strokeDasharray: '3 3' }} />
             <Scatter name="A school" data={salesData}>
