@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import priceChart from '../utils/priceChart';
+import areaChartFilter from '../utils/areaChartFilter';
 import randomColor from '../utils/randomColor';
 import "react-tabs/style/react-tabs.css";
 import { useParams, useLocation  } from "react-router-dom";
@@ -47,7 +48,7 @@ const Analysis = () => {
   }
   const fetchListing = async () => {
     const listingData = await axios.get(`https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=${param.collectionName}&type=listed_count`)
-    setListing(listingData.data)
+    setListing(areaChartFilter(listingData.data))
   }
   const fetchOwner = async () => {
     const nftData = await axios.get(`https://api.nftinit.io/api/get_nfts_per_owner/?c=${param.id}`)
