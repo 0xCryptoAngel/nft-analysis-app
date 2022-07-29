@@ -43,7 +43,7 @@ const Analysis = () => {
   }
   const fetchStrength = async ()=> {
     const strengthData = await axios.get(`https://api.nftinit.io/api/get_price_distribution/?c=${param.id}`)
-    setStrength(strengthData.data.items)
+    setStrength(strengthData.data.items.reverse())
   }
   const fetchListing = async () => {
     const listingData = await axios.get(`https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=${param.collectionName}&type=listed_count`)
