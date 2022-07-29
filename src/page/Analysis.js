@@ -70,6 +70,10 @@ const Analysis = () => {
       </g>
     );
   }
+  const divStyle = {
+    color: 'blue',
+  };
+  
   
   return (
     <div className="p-8 flex flex-col space-y-4">
@@ -112,9 +116,9 @@ const Analysis = () => {
               }}
             >
               <CartesianGrid strokeDasharray="4 4" vertical={false}/>
-              <XAxis dataKey="nft" interval={Math.floor(strength.length/10)} />
+              <XAxis dataKey="nft" interval={Math.floor(nftOwner.length/10)} />
               <YAxis />
-              <Tooltip />
+              <Tooltip wrapperStyle={divStyle}/>
               <Bar dataKey="holder" fill="#37AEC4" />
             </BarChart>
           </ResponsiveContainer>
@@ -142,7 +146,7 @@ const Analysis = () => {
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis dataKey="timestamp" interval={Math.floor(strength.length/2)} tick={<CustomizedAxisTick />}/>
+              <XAxis dataKey="timestamp" interval={Math.floor(listing.length/10)} tick={<CustomizedAxisTick />}/>
               <YAxis />
               <Tooltip />
               <Area type="monotone" dataKey="listed_count" stroke="#ED434B" fillOpacity={1} fill="url(#listing)" />
@@ -170,7 +174,7 @@ const Analysis = () => {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="4 4" vertical={false}/>
-                <XAxis dataKey="timestamp" interval={Math.floor(strength.length/2)} tick={<CustomizedAxisTick />} />
+                <XAxis dataKey="timestamp" interval={Math.floor(collection.length/10)} tick={<CustomizedAxisTick />} />
                 <YAxis />
                 <Tooltip />
                 <Area type="monotone" dataKey="floor_price" stroke="#4340A7" fillOpacity={1} fill="url(#colorPv)" />
@@ -192,7 +196,7 @@ const Analysis = () => {
             }}
           >
             <CartesianGrid strokeDasharray="4 4" vertical={false}/>
-            <XAxis dataKey="event_date" interval={Math.floor(strength.length/2)} tick={<CustomizedAxisTick />}/>
+            <XAxis dataKey="event_date" interval={Math.floor(salesData.length/10)} tick={<CustomizedAxisTick />}/>
             <YAxis dataKey="event_price" />
             <Tooltip cursor={{ strokeDasharray: '3 3' }} />
             <Scatter name="A school" data={salesData}>

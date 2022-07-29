@@ -66,3 +66,7 @@ tr:hover {
 .react-tabs__tab:focus:after {
   background: none !important;
 }
+.recharts-tooltip-cursor {
+  background-color: #353554 !important;
+  opacity: 0.3 !important;
+}
