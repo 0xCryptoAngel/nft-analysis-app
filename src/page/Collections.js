@@ -64,6 +64,7 @@ const Collections = () => {
                     <Link
                       to={`/analysis/${item.slug}`}
                       state={item.id}
+                      className="flex items-center space-x-8"
                     >
                       <img src={item.image} alt="img" className="w-10 h-10 rounded" />
                       <div className="flex items-center">
