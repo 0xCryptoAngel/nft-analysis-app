@@ -5,12 +5,12 @@ import salesChart from '../utils/salesChart';
 import areaChartFilter from '../utils/areaChartFilter';
 import randomColor from '../utils/randomColor';
 import "react-tabs/style/react-tabs.css";
-import { useParams, useLocation  } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import axios from 'axios';
 import {
   ResponsiveContainer,
   BarChart,
-  ScatterChart, 
+  ScatterChart,
   AreaChart,
   Area,
   Bar,
@@ -23,15 +23,16 @@ import {
 } from "recharts";
 
 const Analysis = () => {
+  const { state } = useLocation();
+
   const [collection, setCollection] = useState([])
   const [strength, setStrength] = useState([])
   const [listing, setListing] = useState([])
   const [nftOwner, setNftOwner] = useState([])
   const [salesData, setSalesData] = useState([])
   const param = useParams();
-  console.log("location", param.collectionName)
 
-  useEffect(()=> {
+  useEffect(() => {
     fetchCollection()
     fetchStrength()
     fetchListing()
@@ -39,12 +40,12 @@ const Analysis = () => {
     fetchSales()
   }, [])
   const fetchCollection = async () => {
-   
+
     const openSeaData = await axios.get(`https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=${param.collectionName}&type=floor_price`)
     setCollection(areaChartFilter(openSeaData.data))
   }
-  const fetchStrength = async ()=> {
-    const strengthData = await axios.get(`https://api.nftinit.io/api/get_price_distribution/?c=${param.id}`)
+  const fetchStrength = async () => {
+    const strengthData = await axios.get(`https://api.nftinit.io/api/get_price_distribution/?c=${state}`)
     setStrength(strengthData.data.items.reverse())
   }
   const fetchListing = async () => {
@@ -52,7 +53,7 @@ const Analysis = () => {
     setListing(areaChartFilter(listingData.data))
   }
   const fetchOwner = async () => {
-    const nftData = await axios.get(`https://api.nftinit.io/api/get_nfts_per_owner/?c=${param.id}`)
+    const nftData = await axios.get(`https://api.nftinit.io/api/get_nfts_per_owner/?c=${state}`)
     setNftOwner(nftData.data.items)
   }
   const fetchSales = async () => {
@@ -74,8 +75,8 @@ const Analysis = () => {
   const divStyle = {
     color: 'blue',
   };
-  
-  
+
+
   return (
     <div className="p-8 flex flex-col space-y-4">
       <div className="flex justify-between">
@@ -95,7 +96,7 @@ const Analysis = () => {
               }}
             >
               <XAxis type="number" />
-              <YAxis type="category" dataKey="price_range" interval={Math.floor(strength.length/10)}/>
+              <YAxis type="category" dataKey="price_range" interval={Math.floor(strength.length / 10)} />
               <Tooltip />
               <Bar dataKey="count" fill="#37AEC4" />
             </BarChart>
@@ -115,9 +116,9 @@ const Analysis = () => {
                 bottom: 5
               }}
             >
-              <XAxis dataKey="nft" interval={Math.floor(nftOwner.length/10)} />
+              <XAxis dataKey="nft" interval={Math.floor(nftOwner.length / 10)} />
               <YAxis />
-              <Tooltip wrapperStyle={divStyle}/>
+              <Tooltip wrapperStyle={divStyle} />
               <Bar dataKey="holder" fill="#37AEC4" />
             </BarChart>
           </ResponsiveContainer>
@@ -140,11 +141,11 @@ const Analysis = () => {
             >
               <defs>
                 <linearGradient id="listing" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#ED434B" stopOpacity={0.8}/>
-                  <stop offset="95%" stopColor="#ED434B" stopOpacity={0}/>
+                  <stop offset="5%" stopColor="#ED434B" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#ED434B" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <XAxis dataKey="timestamp" interval={Math.floor(listing.length/10)} tick={<CustomizedAxisTick />}/>
+              <XAxis dataKey="timestamp" interval={Math.floor(listing.length / 10)} tick={<CustomizedAxisTick />} />
               <YAxis />
               <Tooltip />
               <Area type="monotone" dataKey="listed_count" stroke="#ED434B" fillOpacity={1} fill="url(#listing)" />
@@ -155,27 +156,27 @@ const Analysis = () => {
           <div className="text-white text-xl font-bold text-center">Floor Price</div>
           <ResponsiveContainer width="100%" height={400}>
             <AreaChart
-                width={1400}
-                height={800}
-                data={collection}
-                margin={{
-                  top: 10,
-                  right: 30,
-                  left: 0,
-                  bottom: 0,
-                }}
-              >
-                <defs>
-                  <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#4340A7" stopOpacity={0.8}/>
-                    <stop offset="95%" stopColor="#4340A7" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <XAxis dataKey="timestamp" interval={Math.floor(collection.length/10)} tick={<CustomizedAxisTick />} />
-                <YAxis />
-                <Tooltip />
-                <Area type="monotone" dataKey="floor_price" stroke="#4340A7" fillOpacity={1} fill="url(#colorPv)" />
-              </AreaChart>
+              width={1400}
+              height={800}
+              data={collection}
+              margin={{
+                top: 10,
+                right: 30,
+                left: 0,
+                bottom: 0,
+              }}
+            >
+              <defs>
+                <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#4340A7" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#4340A7" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <XAxis dataKey="timestamp" interval={Math.floor(collection.length / 10)} tick={<CustomizedAxisTick />} />
+              <YAxis />
+              <Tooltip />
+              <Area type="monotone" dataKey="floor_price" stroke="#4340A7" fillOpacity={1} fill="url(#colorPv)" />
+            </AreaChart>
           </ResponsiveContainer>
         </div>
       </div>
@@ -192,7 +193,7 @@ const Analysis = () => {
               left: 20,
             }}
           >
-            <XAxis dataKey="event_date" interval={Math.floor(salesData.length/10)} tick={<CustomizedAxisTick />}/>
+            <XAxis dataKey="event_date" interval={Math.floor(salesData.length / 10)} tick={<CustomizedAxisTick />} />
             <YAxis dataKey="event_price" />
             <Tooltip cursor={{ strokeDasharray: '3 3' }} />
             <Scatter name="A school" data={salesData}>

@@ -27,7 +27,7 @@ ReactDOM.render(
             <Route path="/" element={<Mint />} />
             <Route path="/wallet-manager" element={<WalletManager/>} />
             <Route path="/collections" element={<Collections/>} />
-            <Route path="/analysis/:collectionName/:id" element={<Analysis/>} />
+            <Route path="/analysis/:collectionName" element={<Analysis/>} />
           </Routes>
         </BrowserRouter>
       </MetamaskProvider>
