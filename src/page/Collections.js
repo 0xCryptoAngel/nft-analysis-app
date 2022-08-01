@@ -123,11 +123,10 @@ const Collections = () => {
                   <td>{Math.floor(item.floor_price * 1000) / 1000}</td>
                   <td>
                     <div className="flex space-x-3">
-                      {item.image && <img src={opensea} alt="load" className="w-7 h-7" />}
-                      {item.website && <img src={website} alt="load" className="w-7 h-7" />}
-                      {item.discord_url && <img src={discord} alt="load" className="w-7 h-7" />}
-                      {item.twitter_username && <img src={twitter} alt="load" className="w-7 h-7" />}
-                      {item.website && <img src={website} alt="load" className="w-7 h-7" />}
+                      {item.image && <a href={item.image}><img src={opensea} alt="load" className="w-7 h-7" /></a>}
+                      {item.discord_url && <a href={item.discord_url}><img src={discord} alt="load" className="w-7 h-7" /></a>}
+                      {item.twitter_username && <a href={`https://twitter.com/${item.twitter_username}`}><img src={twitter} alt="load" className="w-7 h-7" /></a>}
+                      {item.website && <a href={item.website}><img src={website} alt="load" className="w-7 h-7" /></a>}
                     </div>
                   </td>
                   {/* <td>
