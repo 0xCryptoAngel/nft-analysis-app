@@ -24,13 +24,13 @@ import {
 
 const Analysis = () => {
   const { state } = useLocation();
+  const param = useParams();
 
   const [collection, setCollection] = useState([])
   const [strength, setStrength] = useState([])
   const [listing, setListing] = useState([])
   const [nftOwner, setNftOwner] = useState([])
   const [salesData, setSalesData] = useState([])
-  const param = useParams();
 
   useEffect(() => {
     fetchCollection()

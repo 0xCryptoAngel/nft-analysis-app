@@ -9,7 +9,7 @@ import Web3 from 'web3'
 const Navbar = () => {
   let location = useLocation();
   const [gas, setGas] = useState(0)
-  const web3 = new Web3(`https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`)
+  const web3 = new Web3("https://rpc.flashbots.net")
   useEffect(()=>
     web3.eth.getGasPrice().then((result) => {
       setGas(web3.utils.fromWei(result, 'Gwei'))
