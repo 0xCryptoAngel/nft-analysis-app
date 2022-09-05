@@ -59,7 +59,6 @@ const Analysis = () => {
   const fetchSales = async () => {
     const sales = await axios.get(`https://api.nftinit.io/api/sale_chart/?slug=${param.collectionName}&tc=true&tn=true`)
     let data = salesChart(sales)
-    console.log("data", data)
     setSalesData(data)
   }
   const CustomizedAxisTick = (props) => {

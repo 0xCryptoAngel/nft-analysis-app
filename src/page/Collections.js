@@ -19,7 +19,6 @@ const Collections = () => {
   }, [period])
   const fetchCollection = async (period) => {
     const openSeaData = await axios.get(`https://api.nftinit.io/api/getTrendingCollections/?format=json&period=${period}`)
-    console.log("openSeaData", openSeaData)
     setLoad(false)
     setCollection(openSeaData.data)
   }

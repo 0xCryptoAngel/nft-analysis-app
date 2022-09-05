@@ -5,6 +5,7 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
 import Clipboard from '../assets/Clipboard.svg';
 import ClipboardOrigin from '../assets/ClipboardOrigin.svg';
 import OutWebsite from '../assets/OutWebsite.svg';
+import listedData from '../utils/listedData';
 import ether from "../assets/ether.svg"
 import website from "../assets/website.svg"
 import discord from "../assets/discord.svg"
@@ -18,6 +19,10 @@ import {
 const AnalysisBoard = () => {
   const param = useParams();
   const [collection, setCollection] = useState()
+  const [floorPrice, setFloorPrice] = useState()
+  const [listedCount, setListedCount] = useState()
+  const [volume, setVolume] = useState()
+  const [sales, setSales] = useState()
   const [isClipboard1, setIsClipboard1] = useState(false)
   const [nft, setNft] = useState('')
   const [isLoad, setIsLoad] = useState(false)
@@ -69,19 +74,38 @@ const AnalysisBoard = () => {
   useEffect(() => {
     fetchCollection()
     fetchPrice()
+    fetchlistedCount()
+    fetchVolume()
+    fetchSales()
   }, [])
   const fetchCollection = async () => {
     setIsLoad(true)
-    const openSeaData = await axios.get(`https://nameless-garden-35810.herokuapp.com/collections/${param.collectionName}`)
-    console.log("openSeaData", openSeaData.data.data.collection)
+    const openSeaData = await axios.get(`https://api.opensea.io/api/v1/collection/${param.collectionName}`, { headers: { "x-api-key": "b410249ba9b14309afd104ee97497485" } })
 
-    setCollection(openSeaData.data.data.collection)
-    setNft(openSeaData.data.data.collection?.primary_asset_contracts[0].address)
+    setCollection(openSeaData.data.collection)
+    setNft(openSeaData.data.collection?.primary_asset_contracts[0].address)
     setIsLoad(false)
   }
   const fetchPrice = async () => {
-    const floor_Price = await axios.get(`https://nameless-garden-35810.herokuapp.com//collection?type=${param.collectionName}`)
-    console.log("floor_Price", floor_Price.data.result)
+    const openSeaData = await axios.get(`https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=${param.collectionName}&type=floor_price&start=1661779045`)
+    setFloorPrice(openSeaData.data);
+  }
+
+  const fetchlistedCount = async () => {
+    const openSeaData = await axios.get(`https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=${param.collectionName}&type=listed_count`)
+    setListedCount(listedData(openSeaData.data));
+    
+  }
+
+  const fetchVolume = async () => {
+    const openSeaData = await axios.get(`https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=${param.collectionName}&type=one_day_volume&start=1662127896`)
+    setVolume(openSeaData.data);
+  }
+
+  const fetchSales = async () => {
+    const openSeaData = await axios.get(`https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=${param.collectionName}&type=one_day_sales&start=1662128662`)
+    setSales(openSeaData.data);
+    
   }
   const clipboardPan1 = () => {
     setIsClipboard1(true)
@@ -147,7 +171,7 @@ const AnalysisBoard = () => {
             <div className="bg-blue-860 w-76 flex p-2 justify-between">
               <div>
                 <div className="text-xs text-gray-300 font-bold">Floor Price</div>
-                <div className="space-x-1"> <span className="text-2xl font-bold">{collection?.stats?.average_price.toFixed(3)}</span><span className="text-sm font-bold">ETH</span></div>
+                <div className="space-x-1"> <span className="text-2xl font-bold">{collection?.stats?.floor_price.toFixed(3)}</span><span className="text-sm font-bold">ETH</span></div>
                 <div>---</div>
               </div>
               <div className="flex flex-col">
@@ -155,7 +179,7 @@ const AnalysisBoard = () => {
                   <AreaChart
                     width={150}
                     height={50}
-                    data={data}
+                    data={floorPrice}
                     margin={{
                       top: 10,
                       right: 0,
@@ -169,7 +193,7 @@ const AnalysisBoard = () => {
                         <stop offset="100%" stopColor="#82ca9d" stopOpacity={0}/>
                       </linearGradient>
                     </defs>
-                    <Area type="monotone" dataKey="pv" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" strokeWidth={2} />
+                    <Area type="monotone" dataKey="floor_price" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" strokeWidth={2} />
                   </AreaChart>
                 <div className="flex justify-between text-xs">
                   <div>7d ago</div>
@@ -181,7 +205,7 @@ const AnalysisBoard = () => {
             <div className="bg-blue-860 w-76 flex p-2 justify-between">
               <div>
                 <div className="text-xs text-gray-300 font-bold">Listed Assets</div>
-                <div className="space-x-1"> <span className="text-2xl font-bold">{collection?.stats?.average_price.toFixed(1)}</span><span className="text-sm font-bold">/1000 (-%)</span></div>
+                <div className="space-x-1"> <span className="text-2xl font-bold">{listedCount && listedCount[listedCount?.length - 1]?.listed_count}</span><span className="text-sm font-bold">/{collection?.stats?.total_supply}</span></div>
                 <div>---</div>
               </div>
               <div className="flex flex-col">
@@ -189,7 +213,7 @@ const AnalysisBoard = () => {
                   <AreaChart
                     width={150}
                     height={50}
-                    data={data}
+                    data={listedCount}
                     margin={{
                       top: 10,
                       right: 0,
@@ -203,7 +227,7 @@ const AnalysisBoard = () => {
                         <stop offset="100%" stopColor="#82ca9d" stopOpacity={0}/>
                       </linearGradient>
                     </defs>
-                    <Area type="monotone" dataKey="uv" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" strokeWidth={2} />
+                    <Area type="monotone" dataKey="listed_count" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" strokeWidth={2} />
                   </AreaChart>
                 <div className="flex justify-between text-xs">
                   <div>7d ago</div>
@@ -215,7 +239,7 @@ const AnalysisBoard = () => {
             <div className="bg-blue-860 w-76 flex p-2 justify-between">
               <div>
                 <div className="text-xs text-gray-300 font-bold">24h Volume</div>
-                <div className="space-x-1"> <span className="text-2xl font-bold">{collection?.stats?.average_price.toFixed(3)}</span><span className="text-sm font-bold">ETH</span></div>
+                <div className="space-x-1"> <span className="text-2xl font-bold">{collection?.stats?.one_day_volume.toFixed(3)}</span><span className="text-sm font-bold">ETH</span></div>
                 <div>---</div>
               </div>
               <div className="flex flex-col">
@@ -223,7 +247,7 @@ const AnalysisBoard = () => {
                   <AreaChart
                     width={150}
                     height={50}
-                    data={data}
+                    data={volume}
                     margin={{
                       top: 10,
                       right: 0,
@@ -233,11 +257,11 @@ const AnalysisBoard = () => {
                   >
                     <defs>
                       <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#990033" stopOpacity={1}/>
-                        <stop offset="100%" stopColor="#990033" stopOpacity={0}/>
+                        <stop offset="0%" stopColor="#82ca9d" stopOpacity={1}/>
+                        <stop offset="100%" stopColor="#82ca9d" stopOpacity={0}/>
                       </linearGradient>
                     </defs>
-                    <Area type="monotone" dataKey="uv" stroke="#990033" fillOpacity={1} fill="url(#colorPv)" strokeWidth={2} />
+                    <Area type="monotone" dataKey="one_day_volume" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" strokeWidth={2} />
                   </AreaChart>
                 <div className="flex justify-between text-xs">
                   <div>7d ago</div>
@@ -249,7 +273,7 @@ const AnalysisBoard = () => {
             <div className="bg-blue-860 w-76 flex p-2 justify-between">
               <div>
                 <div className="text-xs text-gray-300 font-bold">24h Trades</div>
-                <div className="space-x-1"> <span className="text-2xl font-bold">{collection?.stats?.average_price.toFixed(0)}</span></div>
+                <div className="space-x-1"> <span className="text-2xl font-bold">{collection?.stats?.one_day_sales.toFixed(0)}</span></div>
                 <div>---</div>
               </div>
               <div className="flex flex-col">
@@ -257,7 +281,7 @@ const AnalysisBoard = () => {
                   <AreaChart
                     width={150}
                     height={50}
-                    data={data}
+                    data={sales}
                     margin={{
                       top: 10,
                       right: 0,
@@ -267,11 +291,11 @@ const AnalysisBoard = () => {
                   >
                     <defs>
                       <linearGradient id="colorTr" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#990033" stopOpacity={1}/>
-                        <stop offset="100%" stopColor="#990033" stopOpacity={0}/>
+                        <stop offset="0%" stopColor="#82ca9d" stopOpacity={1}/>
+                        <stop offset="100%" stopColor="#82ca9d" stopOpacity={0}/>
                       </linearGradient>
                     </defs>
-                    <Area type="monotone" dataKey="uv" stroke="#990033" fillOpacity={1} fill="url(#colorTr)" strokeWidth={2} />
+                    <Area type="monotone" dataKey="one_day_sales" stroke="#82ca9d" fillOpacity={1} fill="url(#colorTr)" strokeWidth={2} />
                   </AreaChart>
                 <div className="flex justify-between text-xs">
                   <div>7d ago</div>
