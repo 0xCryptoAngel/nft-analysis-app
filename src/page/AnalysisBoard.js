@@ -109,34 +109,34 @@ const AnalysisBoard = () => {
     setIsLoad(false)
   }
   const fetchPrice = async () => {
-    const openSeaData = await axios.get(`https://13.39.48.66:3000/FloorPrice?timestamp=1661779045&collectionName=${param.collectionName}`)
+    const openSeaData = await axios.get(`https://13.39.48.66/FloorPrice?timestamp=1661779045&collectionName=${param.collectionName}`)
     setFloorPrice(openSeaData.data);
   }
 
   const fetchlistedCount = async () => {
-    const openSeaData = await axios.get(`https://13.39.48.66:3000/ListedCount?collectionName=${param.collectionName}`)
+    const openSeaData = await axios.get(`https://13.39.48.66/ListedCount?collectionName=${param.collectionName}`)
     setListedCount(listedData(openSeaData.data));
     
   }
 
   const fetchVolume = async () => {
     // const openSeaData = await axios.get(`https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=${param.collectionName}&type=one_day_volume&start=1662127896`)
-    const openSeaData = await axios.get(`https://13.39.48.66:3000/OneDayVolume?timestamp=1662127896&collectionName=${param.collectionName}`)
+    const openSeaData = await axios.get(`https://13.39.48.66/OneDayVolume?timestamp=1662127896&collectionName=${param.collectionName}`)
     setVolume(openSeaData.data);
   }
 
   const fetchSales = async () => {
     // const openSeaData = await axios.get(`https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=${param.collectionName}&type=one_day_sales&start=1662128662`)
-    const openSeaData = await axios.get(`https://13.39.48.66:3000/OneDaySales?timestamp=1662128662&collectionName=${param.collectionName}`)
+    const openSeaData = await axios.get(`https://13.39.48.66/OneDaySales?timestamp=1662128662&collectionName=${param.collectionName}`)
     setSales(openSeaData.data);
   }
 
   const fetchListing = async () => {
-    const listingData = await axios.get(`https://13.39.48.66:3000/ListedCount?collectionName=${param.collectionName}`)
+    const listingData = await axios.get(`https://13.39.48.66/ListedCount?collectionName=${param.collectionName}`)
     setListing(areaChartFilter(listingData.data))
   }
   const fetchRank = async () => {
-    const sales = await axios.get(`https://13.39.48.66:3000/SaleChart?collectionName=${param.collectionName}`)
+    const sales = await axios.get(`https://13.39.48.66/SaleChart?collectionName=${param.collectionName}`)
     let data = salesChart(sales)
     setSalesData(data)
   }
