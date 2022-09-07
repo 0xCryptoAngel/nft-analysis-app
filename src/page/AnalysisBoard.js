@@ -1,31 +1,51 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import Clipboard from '../assets/Clipboard.svg';
+import randomColor from '../utils/randomColor';
 import ClipboardOrigin from '../assets/ClipboardOrigin.svg';
 import OutWebsite from '../assets/OutWebsite.svg';
 import listedData from '../utils/listedData';
+import areaChartFilter from '../utils/areaChartFilter';
+import priceChart from '../utils/priceChart';
 import ether from "../assets/ether.svg"
 import website from "../assets/website.svg"
 import discord from "../assets/discord.svg"
 import twitter from "../assets/twitter.svg"
 import loading from "../assets/loading.svg"
+import salesChart from '../utils/salesChart';
+
 import {
+  ResponsiveContainer,
+  ComposedChart,
+  BarChart,
+  ScatterChart,
   AreaChart,
   Area,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Cell,
+  Scatter
 } from "recharts";
 
 const AnalysisBoard = () => {
   const param = useParams();
+  const { state } = useLocation();
+
   const [collection, setCollection] = useState()
   const [floorPrice, setFloorPrice] = useState()
+  const [listing, setListing] = useState([])
   const [listedCount, setListedCount] = useState()
   const [volume, setVolume] = useState()
   const [sales, setSales] = useState()
   const [isClipboard1, setIsClipboard1] = useState(false)
   const [nft, setNft] = useState('')
   const [isLoad, setIsLoad] = useState(false)
+  const [salesData, setSalesData] = useState([])
   const data = [
     {
       name: 'Page A',
@@ -77,6 +97,8 @@ const AnalysisBoard = () => {
     fetchlistedCount()
     fetchVolume()
     fetchSales()
+    fetchListing()
+    fetchRank()
   }, [])
   const fetchCollection = async () => {
     setIsLoad(true)
@@ -105,7 +127,16 @@ const AnalysisBoard = () => {
   const fetchSales = async () => {
     const openSeaData = await axios.get(`https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=${param.collectionName}&type=one_day_sales&start=1662128662`)
     setSales(openSeaData.data);
-    
+  }
+
+  const fetchListing = async () => {
+    const listingData = await axios.get(`https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=${param.collectionName}&type=listed_count`)
+    setListing(areaChartFilter(listingData.data))
+  }
+  const fetchRank = async () => {
+    const sales = await axios.get(`https://api.nftinit.io/api/sale_chart/?slug=${param.collectionName}&tc=true&tn=true`)
+    let data = salesChart(sales)
+    setSalesData(data)
   }
   const clipboardPan1 = () => {
     setIsClipboard1(true)
@@ -113,6 +144,22 @@ const AnalysisBoard = () => {
       setIsClipboard1(false)
     }, "1000")
   }
+
+  const CustomizedAxisTick = (props) => {
+    const { x, y, stroke, payload } = props;
+    return (
+      <g transform={`translate(${x},${y})`}>
+        <text x={0} y={0} dy={16} textAnchor="end" fontSize={12} fill="#666">
+          {payload.value && priceChart(payload.value)}
+        </text>
+      </g>
+    );
+  }
+
+  const divStyle = {
+    color: 'blue',
+  };
+
 
   return (
     <>
@@ -168,7 +215,7 @@ const AnalysisBoard = () => {
         </div>
         <div className="border-t-4 border-blue-820 pt-24 bg-gradient-to-b from-blue-810 to-blue-840">
           <div className="text-white max-w-7xl mx-auto flex justify-between ">
-            <div className="bg-blue-860 w-76 flex p-2 justify-between">
+            <div className="bg-blue-860 w-76 flex p-4 justify-between">
               <div>
                 <div className="text-xs text-gray-300 font-bold">Floor Price</div>
                 <div className="space-x-1"> <span className="text-2xl font-bold">{collection?.stats?.floor_price.toFixed(3)}</span><span className="text-sm font-bold">ETH</span></div>
@@ -202,7 +249,7 @@ const AnalysisBoard = () => {
               </div>
             </div>
             
-            <div className="bg-blue-860 w-76 flex p-2 justify-between">
+            <div className="bg-blue-860 w-76 flex p-4 justify-between">
               <div>
                 <div className="text-xs text-gray-300 font-bold">Listed Assets</div>
                 <div className="space-x-1"> <span className="text-2xl font-bold">{listedCount && listedCount[listedCount?.length - 1]?.listed_count}</span><span className="text-sm font-bold">/{collection?.stats?.total_supply}</span></div>
@@ -236,7 +283,7 @@ const AnalysisBoard = () => {
               </div>
             </div>
 
-            <div className="bg-blue-860 w-76 flex p-2 justify-between">
+            <div className="bg-blue-860 w-76 flex p-4 justify-between">
               <div>
                 <div className="text-xs text-gray-300 font-bold">24h Volume</div>
                 <div className="space-x-1"> <span className="text-2xl font-bold">{collection?.stats?.one_day_volume.toFixed(3)}</span><span className="text-sm font-bold">ETH</span></div>
@@ -270,7 +317,7 @@ const AnalysisBoard = () => {
               </div>
             </div>
 
-            <div className="bg-blue-860 w-76 flex p-2 justify-between">
+            <div className="bg-blue-860 w-76 flex p-4 justify-between">
               <div>
                 <div className="text-xs text-gray-300 font-bold">24h Trades</div>
                 <div className="space-x-1"> <span className="text-2xl font-bold">{collection?.stats?.one_day_sales.toFixed(0)}</span></div>
@@ -306,6 +353,106 @@ const AnalysisBoard = () => {
             
           </div>
         </div>
+        <div className="flex justify-between pt-12 px-8">
+          <div className="w-1/6">
+            <div className="text-white">Listings</div> 
+          </div>
+          <div className="w-3/5 mx-auto">
+            <div className="flex justify-between">
+              <div className="w-3/7 space-y-2">
+                <div className="text-white text-xl font-bold text-center">Assets for sale</div>
+                <div className="bg-blue-860 p-2 rounded-xl">
+                  <ResponsiveContainer width="100%" height={300}>
+                    <AreaChart
+                      width={400}
+                      height={300}
+                      data={listing}
+                      margin={{
+                        top: 0,
+                        right: 0,
+                        left: 0,
+                        bottom: 0,
+                      }}
+                    >
+                      <defs>
+                        <linearGradient id="listing" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#423FA8" stopOpacity={0.8} />
+                          <stop offset="95%" stopColor="#423FA8" stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <XAxis dataKey="timestamp" interval={Math.floor(listing.length / 10)} tick={<CustomizedAxisTick />} />
+                      <YAxis tick={{fontSize: 12}} />
+                      <Tooltip />
+                      <Area type="monotone" dataKey="listed_count" stroke="#423FA8" fillOpacity={1} fill="url(#listing)"  />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+              <div className="w-3/7 space-y-2">
+                <div className="text-white text-xl font-bold text-center">Floor Price</div>
+                <div className="bg-blue-860 p-2 rounded-xl">
+                  <ResponsiveContainer width="100%" height={300}>
+                    <AreaChart
+                      width={400}
+                      height={300}
+                      data={floorPrice}
+                      margin={{
+                        top: 0,
+                        right: 0,
+                        left: 0,
+                        bottom: 0,
+                      }}
+                    >
+                      <defs>
+                        <linearGradient id="floorPrice" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#ED434B" stopOpacity={0.8} />
+                          <stop offset="95%" stopColor="#ED434B" stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <XAxis dataKey="timestamp" interval={Math.floor(floorPrice?.length / 10)} tick={<CustomizedAxisTick />} />
+                      <YAxis tick={{fontSize: 12}} />
+                      <Tooltip />
+                      <Area type="monotone" dataKey="floor_price" stroke="#ED434B" fillOpacity={1} fill="url(#floorPrice)" />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            </div>
+
+              <div>
+                <div className="text-white text-xl font-bold text-center py-4">Sales / Ranking</div>
+                <div className="bg-blue-860 rounded-xl">
+                  <ResponsiveContainer width="100%" height={400}>
+                    <ComposedChart
+                      width={1400}
+                      height={800}
+                      data={salesData}
+                      margin={{
+                        top: 20,
+                        right: 20,
+                        bottom: 20,
+                        left: 20,
+                      }}
+                    >
+                      <XAxis dataKey="event_date" interval={Math.floor(salesData.length / 10)} tick={<CustomizedAxisTick />} />
+                      <YAxis dataKey="event_price" tick={{fontSize: 12}} />
+                      <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+                      <Bar dataKey="event_price" barSize={80} fill="#413ea0" />
+                      <Scatter name="A school" dataKey="event_price">
+                        {salesData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={randomColor()} />
+                        ))}
+                      </Scatter>
+                    </ComposedChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            </div>
+          <div className="w-1/6">
+            <div className="text-white">Trades</div>
+          </div>
+        </div>
+
 
       </div>
     }

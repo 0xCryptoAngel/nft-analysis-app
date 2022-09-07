@@ -18,7 +18,7 @@ const Collections = () => {
     fetchCollection(period)
   }, [period])
   const fetchCollection = async (period) => {
-    const openSeaData = await axios.get(`https://api.nftinit.io/api/getTrendingCollections/?format=json&period=${period}`,  {mode: 'no-cors'})
+    const openSeaData = await axios.get(`http://13.39.48.66:3000/Trending?period=${period}`)
     setLoad(false)
     setCollection(openSeaData.data)
   }

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import priceChart from '../utils/priceChart';
 import salesChart from '../utils/salesChart';
 import areaChartFilter from '../utils/areaChartFilter';
@@ -40,7 +39,6 @@ const Analysis = () => {
     fetchSales()
   }, [])
   const fetchCollection = async () => {
-
     const openSeaData = await axios.get(`https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=${param.collectionName}&type=floor_price`)
     setCollection(areaChartFilter(openSeaData.data))
   }
