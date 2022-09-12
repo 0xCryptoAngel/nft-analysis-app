@@ -38,20 +38,37 @@ const AnalysisBoard = () => {
   const param = useParams();
   const { state } = useLocation();
 
-  const [collection, setCollection] = useState()
-  const [floorPrice, setFloorPrice] = useState()
-  const [listing, setListing] = useState([])
-  const [listedCount, setListedCount] = useState()
-  const [volume, setVolume] = useState()
-  const [sales, setSales] = useState()
-  const [isClipboard1, setIsClipboard1] = useState(false)
-  const [nft, setNft] = useState('')
-  const [isLoad, setIsLoad] = useState(false)
-  const [salesData, setSalesData] = useState([])
-
+  const [collection, setCollection] = useState();
+  const [floorPrice, setFloorPrice] = useState();
+  const [listing, setListing] = useState([]);
+  const [listedCount, setListedCount] = useState();
+  const [volume, setVolume] = useState();
+  const [sales, setSales] = useState();
+  const [isClipboard1, setIsClipboard1] = useState(false);
+  const [nft, setNft] = useState('');
+  const [isLoad, setIsLoad] = useState(false);
+  const [salesData, setSalesData] = useState([]);
+  const [period, setPeriod] = useState('1');
+  const [timestamp, setTimestamp] = useState(1661779045)
+  useEffect(()=> {
+    console.log("period", period)
+    switch (Number(period)) {
+      case 1:
+        fetchPrice(period);
+        break;
+      case 3:
+        fetchPrice(period);
+        break;
+      case 6:
+        fetchPrice(period);
+        break;
+      case 24:
+        fetchPrice(period);
+    }
+  }, [period])
   useEffect(() => {
     fetchCollection()
-    fetchPrice()
+    fetchPrice(period)
     fetchlistedCount()
     fetchVolume()
     fetchSales()
@@ -66,9 +83,15 @@ const AnalysisBoard = () => {
     setNft(openSeaData.data.collection?.primary_asset_contracts[0].address)
     setIsLoad(false)
   }
-  const fetchPrice = async () => {
-    const openSeaData = await axios.get(`https://13.39.48.66/FloorPrice?timestamp=1661779045&collectionName=${param.collectionName}`)
-    setFloorPrice(openSeaData.data);
+  const fetchPrice = async (_period) => {
+    const openSeaData = await axios.get(`https://13.39.48.66/FloorPrice?timestamp=${timestamp}&collectionName=${param.collectionName}`)
+    let sortedData = []
+    openSeaData.data?.map((item, index)=> {
+      if(index % Number(_period) == 0) {
+        sortedData.push(item)
+      }
+    })
+    setFloorPrice(sortedData);
   }
 
   const fetchlistedCount = async () => {
@@ -363,9 +386,21 @@ const AnalysisBoard = () => {
                   </ResponsiveContainer>
                 </div>
               </div>
-              <div className="w-3/7 space-y-2">
-                <div className="text-white text-xl font-bold text-center">Floor Price</div>
-                <div className="bg-blue-860 p-2 rounded-xl">
+              <div className="w-3/7 space-y-2 bg-blue-860 rounded-xl">
+                <div className="flex items-center py-2 space-x-4 pl-2">
+                  <div className="text-white text-xl font-bold">Floor Price</div>
+                  <div className="flex items-center space-x-2 text-sm">
+                    <div className="text-white ">Period</div>
+                    <select className="bg-blue-860 text-white border border-white rounded" value={period} onChange={(e)=>setPeriod(e.target.value)}>
+                      <option value="1">1H</option>
+                      <option value="3">3H</option>
+                      <option value="6">6H</option>
+                      <option value="24">1D</option>
+                    </select>
+                  </div>
+                 
+                </div>
+                <div className="p-2">
                   <ResponsiveContainer width="100%" height={300}>
                     <AreaChart
                       width={400}
