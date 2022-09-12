@@ -15,6 +15,7 @@ import discord from "../assets/discord.svg"
 import twitter from "../assets/twitter.svg"
 import loading from "../assets/loading.svg"
 import salesChart from '../utils/salesChart';
+import TradingViewWidget, { Themes } from "react-tradingview-widget";
 
 import {
   ResponsiveContainer,
@@ -26,6 +27,7 @@ import {
   Bar,
   XAxis,
   YAxis,
+  ZAxis,
   CartesianGrid,
   Tooltip,
   Cell,
@@ -46,50 +48,6 @@ const AnalysisBoard = () => {
   const [nft, setNft] = useState('')
   const [isLoad, setIsLoad] = useState(false)
   const [salesData, setSalesData] = useState([])
-  const data = [
-    {
-      name: 'Page A',
-      uv: 0,
-      pv: 0,
-      amt: 2400,
-    },
-    {
-      name: 'Page B',
-      uv: 0,
-      pv: 0,
-      amt: 2210,
-    },
-    {
-      name: 'Page C',
-      uv: 0,
-      pv: 0,
-      amt: 2290,
-    },
-    {
-      name: 'Page D',
-      uv: 0,
-      pv: 3908,
-      amt: 2000,
-    },
-    {
-      name: 'Page E',
-      uv: 0,
-      pv: 8800,
-      amt: 2181,
-    },
-    {
-      name: 'Page F',
-      uv: 0,
-      pv: 3800,
-      amt: 2500,
-    },
-    {
-      name: 'Page G',
-      uv: 0,
-      pv: 1300,
-      amt: 2100,
-    },
-  ];
 
   useEffect(() => {
     fetchCollection()
@@ -122,13 +80,28 @@ const AnalysisBoard = () => {
   const fetchVolume = async () => {
     // const openSeaData = await axios.get(`https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=${param.collectionName}&type=one_day_volume&start=1662127896`)
     const openSeaData = await axios.get(`https://13.39.48.66/OneDayVolume?timestamp=1662127896&collectionName=${param.collectionName}`)
-    setVolume(openSeaData.data);
+    console.log('openSeaData.data.length', openSeaData.data.length)
+    let currentDate = new Date();
+    let dateValue = currentDate.getDate();
+    let monthValue = currentDate.getMonth() + 1;
+    
+    let yearValue = currentDate.getYear();
+    if(openSeaData.data.length === 0) {
+      setVolume([{one_day_volume: 0, timestamp: `${dateValue - 7}-${monthValue}-${yearValue} 12:00:00`}, {one_day_volume: 0, timestamp: `${dateValue - 7}-${monthValue}-${yearValue} 12:00:00`}])
+    } else {
+      setVolume(openSeaData.data);
+    }
   }
 
   const fetchSales = async () => {
     // const openSeaData = await axios.get(`https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=${param.collectionName}&type=one_day_sales&start=1662128662`)
     const openSeaData = await axios.get(`https://13.39.48.66/OneDaySales?timestamp=1662128662&collectionName=${param.collectionName}`)
-    setSales(openSeaData.data);
+    if(openSeaData.data.length === 0) {
+      console.log("-----------")
+      setSales([{one_day_sales: 0, timestamp: "08-09-22 12:00:00"}, {one_day_sales: 0, timestamp: "12-09-22 12:00:00"}])
+    } else {
+      setSales(openSeaData.data);
+    }
   }
 
   const fetchListing = async () => {
@@ -421,37 +394,47 @@ const AnalysisBoard = () => {
               </div>
             </div>
 
-              <div>
-                <div className="text-white text-xl font-bold text-center py-4">Sales / Ranking</div>
-                <div className="bg-blue-860 rounded-xl">
-                  <ResponsiveContainer width="100%" height={400}>
-                    <ComposedChart
-                      width={1400}
-                      height={800}
-                      data={salesData}
-                      margin={{
-                        top: 20,
-                        right: 20,
-                        bottom: 20,
-                        left: 20,
-                      }}
-                    >
-                      <XAxis dataKey="event_date" interval={Math.floor(salesData.length / 10)} tick={<CustomizedAxisTick />} />
-                      <YAxis dataKey="event_price" tick={{fontSize: 12}} />
-                      <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-                      <Bar dataKey="event_price" barSize={80} fill="#413ea0" />
-                      <Scatter name="A school" dataKey="event_price">
-                        {salesData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={randomColor()} />
-                        ))}
-                      </Scatter>
-                    </ComposedChart>
-                  </ResponsiveContainer>
-                </div>
+            <div>
+              <div className="text-white text-xl font-bold text-center py-4">Sales / Ranking</div>
+              <div className="bg-blue-860 rounded-xl">
+                <ResponsiveContainer width="100%" height={400}>
+                  <ComposedChart
+                    width={1400}
+                    height={800}
+                    data={salesData}
+                    margin={{
+                      top: 20,
+                      right: 20,
+                      bottom: 20,
+                      left: 20,
+                    }}
+                  >
+                    <XAxis dataKey="event_date" interval={Math.floor(salesData.length / 10)} tick={<CustomizedAxisTick />} />
+                    <YAxis dataKey="event_price" tick={{fontSize: 12}} />
+                    <ZAxis type="number" range={[20]} />
+                    <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+                    {/* <Bar dataKey="event_price" barSize={80} fill="#413ea0" /> */}
+                    <Scatter name="A school" dataKey="event_price">
+                      {salesData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={randomColor()} />
+                      ))}
+                    </Scatter>
+                  </ComposedChart>
+                </ResponsiveContainer>
               </div>
             </div>
+            <div className="h-96 pt-8">
+              <TradingViewWidget
+                symbol="NASDAQ:AAPL"
+                theme={Themes.DARK}
+                locale="es"
+                autosize
+              />
+            </div>
+          </div>
           <div className="w-1/6">
             <div className="text-white">Trades</div>
+           
           </div>
         </div>
 
