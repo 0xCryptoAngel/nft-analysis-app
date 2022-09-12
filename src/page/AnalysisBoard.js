@@ -84,7 +84,7 @@ const AnalysisBoard = () => {
     setIsLoad(false)
   }
   const fetchPrice = async (_period) => {
-    const openSeaData = await axios.get(`https://13.39.48.66/FloorPrice?timestamp=${timestamp}&collectionName=${param.collectionName}`)
+    const openSeaData = await axios.get(`https://44.201.239.242/FloorPrice?timestamp=${timestamp}&collectionName=${param.collectionName}`)
     let sortedData = []
     openSeaData.data?.map((item, index)=> {
       if(index % Number(_period) == 0) {
@@ -95,22 +95,21 @@ const AnalysisBoard = () => {
   }
 
   const fetchlistedCount = async () => {
-    const openSeaData = await axios.get(`https://13.39.48.66/ListedCount?collectionName=${param.collectionName}`)
+    const openSeaData = await axios.get(`https://44.201.239.242/ListedCount?collectionName=${param.collectionName}`)
     setListedCount(listedData(openSeaData.data));
     
   }
 
   const fetchVolume = async () => {
     // const openSeaData = await axios.get(`https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=${param.collectionName}&type=one_day_volume&start=1662127896`)
-    const openSeaData = await axios.get(`https://13.39.48.66/OneDayVolume?timestamp=1662127896&collectionName=${param.collectionName}`)
-    console.log('openSeaData.data.length', openSeaData.data.length)
+    const openSeaData = await axios.get(`https://44.201.239.242/OneDayVolume?timestamp=1662127896&collectionName=${param.collectionName}`)
     let currentDate = new Date();
     let dateValue = currentDate.getDate();
     let monthValue = currentDate.getMonth() + 1;
-    
     let yearValue = currentDate.getYear();
+
     if(openSeaData.data.length === 0) {
-      setVolume([{one_day_volume: 0, timestamp: `${dateValue - 7}-${monthValue}-${yearValue} 12:00:00`}, {one_day_volume: 0, timestamp: `${dateValue - 7}-${monthValue}-${yearValue} 12:00:00`}])
+      setVolume([{one_day_volume: 0, timestamp: `${dateValue - 7}-${monthValue}-${yearValue} 12:00:00`}, {one_day_volume: 0, timestamp: `${dateValue}-${monthValue}-${yearValue} 12:00:00`}])
     } else {
       setVolume(openSeaData.data);
     }
@@ -118,21 +117,26 @@ const AnalysisBoard = () => {
 
   const fetchSales = async () => {
     // const openSeaData = await axios.get(`https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=${param.collectionName}&type=one_day_sales&start=1662128662`)
-    const openSeaData = await axios.get(`https://13.39.48.66/OneDaySales?timestamp=1662128662&collectionName=${param.collectionName}`)
+    const openSeaData = await axios.get(`https://44.201.239.242/OneDaySales?timestamp=1662128662&collectionName=${param.collectionName}`)
+    let currentDate = new Date();
+    let dateValue = currentDate.getDate();
+    let monthValue = currentDate.getMonth() + 1;
+    let yearValue = currentDate.getYear();
+
     if(openSeaData.data.length === 0) {
       console.log("-----------")
-      setSales([{one_day_sales: 0, timestamp: "08-09-22 12:00:00"}, {one_day_sales: 0, timestamp: "12-09-22 12:00:00"}])
+      setSales([{one_day_sales: 0, timestamp: `${dateValue - 7}-${monthValue}-${yearValue} 12:00:00`}, {one_day_sales: 0, timestamp: `${dateValue}-${monthValue}-${yearValue} 12:00:00`}])
     } else {
       setSales(openSeaData.data);
     }
   }
 
   const fetchListing = async () => {
-    const listingData = await axios.get(`https://13.39.48.66/ListedCount?collectionName=${param.collectionName}`)
+    const listingData = await axios.get(`https://44.201.239.242/ListedCount?collectionName=${param.collectionName}`)
     setListing(areaChartFilter(listingData.data))
   }
   const fetchRank = async () => {
-    const sales = await axios.get(`https://13.39.48.66/SaleChart?collectionName=${param.collectionName}`)
+    const sales = await axios.get(`https://44.201.239.242/SaleChart?collectionName=${param.collectionName}`)
     let data = salesChart(sales)
     setSalesData(data)
   }
