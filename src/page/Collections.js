@@ -18,7 +18,7 @@ const Collections = () => {
     fetchCollection(period)
   }, [period])
   const fetchCollection = async (period) => {
-    const openSeaData = await axios.get(`https://44.201.239.242/Trending?period=${period}`)
+    const openSeaData = await axios.get(`http://44.201.239.242:5000/api/collection/Trending?period=${period}`)
     setLoad(false)
     setCollection(openSeaData.data)
   }

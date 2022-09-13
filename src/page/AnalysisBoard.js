@@ -84,7 +84,7 @@ const AnalysisBoard = () => {
     setIsLoad(false)
   }
   const fetchPrice = async (_period) => {
-    const openSeaData = await axios.get(`https://44.201.239.242/FloorPrice?timestamp=${timestamp}&collectionName=${param.collectionName}`)
+    const openSeaData = await axios.get(`http://44.201.239.242:5000/api/collection/FloorPrice?timestamp=${timestamp}&collectionName=${param.collectionName}`)
     let sortedData = []
     openSeaData.data?.map((item, index)=> {
       if(index % Number(_period) == 0) {
@@ -95,14 +95,14 @@ const AnalysisBoard = () => {
   }
 
   const fetchlistedCount = async () => {
-    const openSeaData = await axios.get(`https://44.201.239.242/ListedCount?collectionName=${param.collectionName}`)
+    const openSeaData = await axios.get(`http://44.201.239.242:5000/api/collection/ListedCount?collectionName=${param.collectionName}`)
     setListedCount(listedData(openSeaData.data));
     
   }
 
   const fetchVolume = async () => {
     // const openSeaData = await axios.get(`https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=${param.collectionName}&type=one_day_volume&start=1662127896`)
-    const openSeaData = await axios.get(`https://44.201.239.242/OneDayVolume?timestamp=1662127896&collectionName=${param.collectionName}`)
+    const openSeaData = await axios.get(`http://44.201.239.242:5000/api/collection/OneDayVolume?timestamp=1662127896&collectionName=${param.collectionName}`)
     let currentDate = new Date();
     let dateValue = currentDate.getDate();
     let monthValue = currentDate.getMonth() + 1;
@@ -117,7 +117,7 @@ const AnalysisBoard = () => {
 
   const fetchSales = async () => {
     // const openSeaData = await axios.get(`https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=${param.collectionName}&type=one_day_sales&start=1662128662`)
-    const openSeaData = await axios.get(`https://44.201.239.242/OneDaySales?timestamp=1662128662&collectionName=${param.collectionName}`)
+    const openSeaData = await axios.get(`http://44.201.239.242:5000/api/collection/OneDaySales?timestamp=1662128662&collectionName=${param.collectionName}`)
     let currentDate = new Date();
     let dateValue = currentDate.getDate();
     let monthValue = currentDate.getMonth() + 1;
@@ -132,11 +132,11 @@ const AnalysisBoard = () => {
   }
 
   const fetchListing = async () => {
-    const listingData = await axios.get(`https://44.201.239.242/ListedCount?collectionName=${param.collectionName}`)
+    const listingData = await axios.get(`http://44.201.239.242:5000/api/collection/ListedCount?collectionName=${param.collectionName}`)
     setListing(areaChartFilter(listingData.data))
   }
   const fetchRank = async () => {
-    const sales = await axios.get(`https://44.201.239.242/SaleChart?collectionName=${param.collectionName}`)
+    const sales = await axios.get(`http://44.201.239.242:5000/api/collection/SaleChart?collectionName=${param.collectionName}`)
     let data = salesChart(sales)
     setSalesData(data)
   }
