@@ -49,7 +49,9 @@ const AnalysisBoard = () => {
   const [isLoad, setIsLoad] = useState(false);
   const [salesData, setSalesData] = useState([]);
   const [period, setPeriod] = useState('1');
+  const [periodList, setPeriodList] = useState('1');
   const [timestamp, setTimestamp] = useState(1661779045)
+  const [saleRange, setSaleRange] = useState('1H')
   useEffect(()=> {
     console.log("period", period)
     switch (Number(period)) {
@@ -65,14 +67,28 @@ const AnalysisBoard = () => {
       case 24:
         fetchPrice(period);
     }
-  }, [period])
+
+    switch (Number(periodList)) {
+      case 1:
+        fetchListing(periodList);
+        break;
+      case 3:
+        fetchListing(periodList);
+        break;
+      case 6:
+        fetchListing(periodList);
+        break;
+      case 24:
+        fetchListing(periodList);
+    }
+  }, [period, periodList])
   useEffect(() => {
     fetchCollection()
     fetchPrice(period)
     fetchlistedCount()
     fetchVolume()
     fetchSales()
-    fetchListing()
+    fetchListing(periodList)
     fetchRank()
   }, [])
   const fetchCollection = async () => {
@@ -84,7 +100,7 @@ const AnalysisBoard = () => {
     setIsLoad(false)
   }
   const fetchPrice = async (_period) => {
-    const openSeaData = await axios.get(`http://44.201.239.242:5000/api/collection/FloorPrice?timestamp=${timestamp}&collectionName=${param.collectionName}`)
+    const openSeaData = await axios.get(`http://localhost:5000/api/collection/FloorPrice?timestamp=${timestamp}&collectionName=${param.collectionName}`)
     let sortedData = []
     openSeaData.data?.map((item, index)=> {
       if(index % Number(_period) == 0) {
@@ -95,14 +111,14 @@ const AnalysisBoard = () => {
   }
 
   const fetchlistedCount = async () => {
-    const openSeaData = await axios.get(`http://44.201.239.242:5000/api/collection/ListedCount?collectionName=${param.collectionName}`)
+    const openSeaData = await axios.get(`http://localhost:5000/api/collection/ListedCount?collectionName=${param.collectionName}`)
     setListedCount(listedData(openSeaData.data));
     
   }
 
   const fetchVolume = async () => {
     // const openSeaData = await axios.get(`https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=${param.collectionName}&type=one_day_volume&start=1662127896`)
-    const openSeaData = await axios.get(`http://44.201.239.242:5000/api/collection/OneDayVolume?timestamp=1662127896&collectionName=${param.collectionName}`)
+    const openSeaData = await axios.get(`http://localhost:5000/api/collection/OneDayVolume?timestamp=1662127896&collectionName=${param.collectionName}`)
     let currentDate = new Date();
     let dateValue = currentDate.getDate();
     let monthValue = currentDate.getMonth() + 1;
@@ -117,7 +133,7 @@ const AnalysisBoard = () => {
 
   const fetchSales = async () => {
     // const openSeaData = await axios.get(`https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=${param.collectionName}&type=one_day_sales&start=1662128662`)
-    const openSeaData = await axios.get(`http://44.201.239.242:5000/api/collection/OneDaySales?timestamp=1662128662&collectionName=${param.collectionName}`)
+    const openSeaData = await axios.get(`http://localhost:5000/api/collection/OneDaySales?timestamp=1662128662&collectionName=${param.collectionName}`)
     let currentDate = new Date();
     let dateValue = currentDate.getDate();
     let monthValue = currentDate.getMonth() + 1;
@@ -131,12 +147,20 @@ const AnalysisBoard = () => {
     }
   }
 
-  const fetchListing = async () => {
-    const listingData = await axios.get(`http://44.201.239.242:5000/api/collection/ListedCount?collectionName=${param.collectionName}`)
-    setListing(areaChartFilter(listingData.data))
+  const fetchListing = async (_period) => {
+    const listingData = await axios.get(`http://localhost:5000/api/collection/ListedCount?collectionName=${param.collectionName}`)
+    console.log("listingData", listingData.data)
+    let sortedData = []
+    listingData.data?.map((item, index)=> {
+      if(index % Number(_period) == 0) {
+        sortedData.push(item)
+      }
+    })
+    console.log("sortedData", sortedData)
+    setListing(areaChartFilter(sortedData))
   }
   const fetchRank = async () => {
-    const sales = await axios.get(`http://44.201.239.242:5000/api/collection/SaleChart?collectionName=${param.collectionName}`)
+    const sales = await axios.get(`http://localhost:5000/api/collection/SaleChart?collectionName=${param.collectionName}`)
     let data = salesChart(sales)
     setSalesData(data)
   }
@@ -361,8 +385,19 @@ const AnalysisBoard = () => {
           </div>
           <div className="w-3/5 mx-auto">
             <div className="flex justify-between">
-              <div className="w-3/7 space-y-2">
-                <div className="text-white text-xl font-bold text-center">Assets for sale</div>
+              <div className="w-3/7 space-y-2 bg-blue-860 rounded-xl">
+                <div className="flex items-center py-2 space-x-4 pl-2">
+                  <div className="text-white text-xl font-bold">Assets for sale</div>
+                  <div className="flex items-center space-x-2 text-sm">
+                    <div className="text-white ">Period</div>
+                    <select className="bg-blue-860 text-white border border-white rounded" value={periodList} onChange={(e)=>setPeriodList(e.target.value)}>
+                      <option value="1">1H</option>
+                      <option value="3">3H</option>
+                      <option value="6">6H</option>
+                      <option value="24">1D</option>
+                    </select>
+                  </div>
+                </div>
                 <div className="bg-blue-860 p-2 rounded-xl">
                   <ResponsiveContainer width="100%" height={300}>
                     <AreaChart
@@ -402,7 +437,6 @@ const AnalysisBoard = () => {
                       <option value="24">1D</option>
                     </select>
                   </div>
-                 
                 </div>
                 <div className="p-2">
                   <ResponsiveContainer width="100%" height={300}>
@@ -433,9 +467,18 @@ const AnalysisBoard = () => {
               </div>
             </div>
 
-            <div>
-              <div className="text-white text-xl font-bold text-center py-4">Sales / Ranking</div>
-              <div className="bg-blue-860 rounded-xl">
+            <div className="bg-blue-860 rounded-xl my-4">
+              <div className="flex pl-2 items-center space-x-2">
+                <div className="text-white text-xl font-bold text-center py-2">Sales / Ranking</div>
+                <div className="text-white ">Range</div>
+                <select className="bg-blue-860 text-white border border-white rounded" value={saleRange} onChange={(e)=>setSaleRange(e.target.value)}>
+                  <option value="1H">1H</option>
+                  <option value="4H">4H</option>
+                  <option value="12H">12H</option>
+                  <option value="24">1D</option>
+                </select>
+              </div>
+              <div className="">
                 <ResponsiveContainer width="100%" height={400}>
                   <ComposedChart
                     width={1400}

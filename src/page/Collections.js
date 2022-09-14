@@ -18,7 +18,8 @@ const Collections = () => {
     fetchCollection(period)
   }, [period])
   const fetchCollection = async (period) => {
-    const openSeaData = await axios.get(`http://44.201.239.242:5000/api/collection/Trending?period=${period}`)
+    const openSeaData = await axios.get(`http://localhost:5000/api/collection/Trending?period=${period}`)
+    console.log('openSeaData', openSeaData)
     setLoad(false)
     setCollection(openSeaData.data)
   }
@@ -57,7 +58,7 @@ const Collections = () => {
               </tr>
             </thead>
             {collection &&
-              <tbody>{collection.map((item, i) =>
+              <tbody>{collection?.map((item, i) =>
                 <tr key={i}>
                   <td className="py-2">
                     <Link
