@@ -81,7 +81,21 @@ const AnalysisBoard = () => {
       case 24:
         fetchListing(periodList);
     }
-  }, [period, periodList])
+
+    switch (saleRange) {
+      case '1H':
+        fetchRank(saleRange);
+        break;
+      case '4H':
+        fetchRank(saleRange);
+        break;
+      case '12H':
+        fetchRank(saleRange);
+        break;
+      case '1D':
+        fetchRank(saleRange);
+    }
+  }, [period, periodList, saleRange])
   useEffect(() => {
     fetchCollection()
     fetchPrice(period)
@@ -89,7 +103,7 @@ const AnalysisBoard = () => {
     fetchVolume()
     fetchSales()
     fetchListing(periodList)
-    fetchRank()
+    fetchRank(saleRange)
   }, [])
   const fetchCollection = async () => {
     setIsLoad(true)
@@ -149,18 +163,17 @@ const AnalysisBoard = () => {
 
   const fetchListing = async (_period) => {
     const listingData = await axios.get(`http://localhost:5000/api/collection/ListedCount?collectionName=${param.collectionName}`)
-    console.log("listingData", listingData.data)
     let sortedData = []
     listingData.data?.map((item, index)=> {
       if(index % Number(_period) == 0) {
         sortedData.push(item)
       }
     })
-    console.log("sortedData", sortedData)
     setListing(areaChartFilter(sortedData))
   }
-  const fetchRank = async () => {
-    const sales = await axios.get(`http://localhost:5000/api/collection/SaleChart?collectionName=${param.collectionName}`)
+  const fetchRank = async (_range) => {
+    console.log('_range', _range)
+    const sales = await axios.get(`http://localhost:5000/api/collection/SaleChart?&period=${_range}&collectionName=${param.collectionName}`)
     let data = salesChart(sales)
     setSalesData(data)
   }
@@ -475,7 +488,7 @@ const AnalysisBoard = () => {
                   <option value="1H">1H</option>
                   <option value="4H">4H</option>
                   <option value="12H">12H</option>
-                  <option value="24">1D</option>
+                  <option value="1D">1D</option>
                 </select>
               </div>
               <div className="">
