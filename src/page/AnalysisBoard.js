@@ -413,7 +413,7 @@ const AnalysisBoard = () => {
             {
               listedAssets && 
               listedAssets.map((item, i) => 
-              <div className="text-white my-2 flex justify-between" key={i}>
+              <div className="text-white my-2 flex justify-between bg-blue-860 p-2 rounded" key={i}>
                   <img src={item.image} alt="banner" className="w-10 h-10"/>
                   <div className="text-xs">
                     <div>TokenId: #{item.token_id}</div>
