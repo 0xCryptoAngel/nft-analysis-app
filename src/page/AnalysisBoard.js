@@ -14,6 +14,7 @@ import website from "../assets/website.svg"
 import discord from "../assets/discord.svg"
 import twitter from "../assets/twitter.svg"
 import loading from "../assets/loading.svg"
+import opensea from "../assets/opensea.svg"
 import salesChart from '../utils/salesChart';
 import TradingViewWidget, { Themes } from "react-tradingview-widget";
 
@@ -52,6 +53,8 @@ const AnalysisBoard = () => {
   const [periodList, setPeriodList] = useState('1');
   const [timestamp, setTimestamp] = useState(1661779045)
   const [saleRange, setSaleRange] = useState('1H')
+  const [listedAssets, setlistedAssets] = useState()
+  const [test, setTest] = useState(0)
   useEffect(()=> {
     console.log("period", period)
     switch (Number(period)) {
@@ -105,6 +108,12 @@ const AnalysisBoard = () => {
     fetchListing(periodList)
     fetchRank(saleRange)
   }, [])
+
+  useEffect(() => {
+    setTimeout(() => {
+      fetchListedAssets()
+    }, 5000);
+  }, [listedAssets])
   const fetchCollection = async () => {
     setIsLoad(true)
     const openSeaData = await axios.get(`https://api.opensea.io/api/v1/collection/${param.collectionName}`, { headers: { "x-api-key": "b410249ba9b14309afd104ee97497485" } })
@@ -176,6 +185,12 @@ const AnalysisBoard = () => {
     const sales = await axios.get(`https://44.201.239.242:5000/api/collection/SaleChart?&period=${_range}&collectionName=${param.collectionName}`)
     let data = salesChart(sales)
     setSalesData(data)
+  }
+  const fetchListedAssets = async () => {
+
+    const listedAssets = await axios.get(`https://44.201.239.242:5000/api/collection/ListedAssets?collectionName=${param.collectionName}`)
+    console.log("listedAssets", listedAssets.data) 
+    setlistedAssets(listedAssets.data)
   }
   const clipboardPan1 = () => {
     setIsClipboard1(true)
@@ -393,8 +408,34 @@ const AnalysisBoard = () => {
           </div>
         </div>
         <div className="flex justify-between pt-12 px-8">
-          <div className="w-1/6">
+          <div className="w-1/6 overflow-y-auto h-screen pr-2">
             <div className="text-white">Listings</div> 
+            {
+              listedAssets && 
+              listedAssets.map((item, i) => 
+              <div className="text-white my-2 flex justify-between" key={i}>
+                  <img src={item.image} alt="banner" className="w-10 h-10"/>
+                  <div className="text-xs">
+                    <div>TokenId: #{item.token_id}</div>
+                    <div>Ranking: #{item.rank}</div>
+                  </div>
+                  <div className="text-xs">
+                    {Math.floor((new Date() - new Date(item. event_date)) / 1000)} sec ago
+                  </div>
+                  <div>
+                    <div className="flex items-center">
+                      <img src={ether} alt="ether" className="w-4 h-4"/>
+                      <div>{item.event_price.toFixed(2)}</div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <a href={item.permalink} target="_blank" rel="noreferrer">
+                        <img src={opensea} alt="opensea" className="w-4 h-4"/>
+                      </a>
+                      <button className="text-xs bg-gray-400 rounded px-2 py-0.5">Buy</button>
+                    </div>
+                  </div>
+              </div>)
+            }
           </div>
           <div className="w-3/5 mx-auto">
             <div className="flex justify-between">
@@ -532,8 +573,6 @@ const AnalysisBoard = () => {
            
           </div>
         </div>
-
-
       </div>
     }
     
