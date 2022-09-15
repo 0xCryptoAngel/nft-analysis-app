@@ -190,7 +190,9 @@ const AnalysisBoard = () => {
 
     const listedAssets = await axios.get(`https://44.201.239.242:5000/api/collection/ListedAssets?collectionName=${param.collectionName}`)
     console.log("listedAssets", listedAssets.data) 
-    setlistedAssets(listedAssets.data)
+
+    let result = listedAssets.data.filter(item => Math.floor((new Date() - new Date(item. event_date)) / 1000) > 0 && Math.floor((new Date() - new Date(item. event_date)) / 1000) < 1000);
+    setlistedAssets(result)
   }
   const clipboardPan1 = () => {
     setIsClipboard1(true)
