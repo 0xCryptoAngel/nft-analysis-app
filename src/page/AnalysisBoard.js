@@ -425,7 +425,7 @@ const AnalysisBoard = () => {
                   <div>
                     <div className="flex items-center">
                       <img src={ether} alt="ether" className="w-4 h-4"/>
-                      <div>{item.event_price.toFixed(2)}</div>
+                      <div>{item.event_price.toFixed(4)}</div>
                     </div>
                     <div className="flex items-center space-x-2">
                       <a href={item.permalink} target="_blank" rel="noreferrer">
